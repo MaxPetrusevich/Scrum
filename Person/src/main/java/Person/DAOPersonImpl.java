@@ -15,6 +15,9 @@ public class DAOPersonImpl implements DAOPerson {
     public static final String PASSWORD = RESOURCE_BUNDLE.getString("password");
     public static final String USER = RESOURCE_BUNDLE.getString("user");
     public static final String URL = RESOURCE_BUNDLE.getString("URL");
+    public static final String TABLE_NAME = Person.class.getDeclaredAnnotation(MyTable.class).name();
+    public static final Field[] FIELDS = Person.class.getDeclaredFields();
+    public static final List<String> COLUMNS = ColumnsName.getColumnsName(FIELDS);
 
     @Override
     public Person save(Person person) throws SQLException, ClassNotFoundException, NoSuchMethodException {
@@ -27,18 +30,8 @@ public class DAOPersonImpl implements DAOPerson {
                 PASSWORD);
         conn.setAutoCommit(false);
         try {
-
-            String tableName = Person.class.getDeclaredAnnotation(MyTable.class).name();
-            Field[] fields = Person.class.getDeclaredFields();
-            List<String> columns = new ArrayList<>();
-            for (Field field :
-                    fields) {
-
-                MyColumn myColumn = field.getAnnotation(MyColumn.class);
-                columns.add(myColumn.name());
-            }
-            String sql = "insert into " + tableName + "(" + columns.get(1) + "," + columns.get(2)
-                    + ")" + "values ('?', '*')";
+            String sql = "insert into " + TABLE_NAME + " (" + COLUMNS.get(1) + " , " + COLUMNS.get(2)
+                    + " ) " + "values ('?', '*')";
             sql = sql.replace("?", person.getName());
             sql = sql.replace("*", person.getSurname());
             preparedStatement = conn.prepareStatement(sql);
@@ -47,7 +40,7 @@ public class DAOPersonImpl implements DAOPerson {
             rs.next();
             int row = rs.getInt(1);
             person.setId(row);
-            String sqlSelect = "select * from " + tableName +
+            String sqlSelect = "select * from " + TABLE_NAME +
                     " order by id desc";
             preparedStatementSelect = conn.prepareStatement(sqlSelect);
             rs = preparedStatementSelect.executeQuery();
@@ -81,6 +74,8 @@ public class DAOPersonImpl implements DAOPerson {
         return person;
     }
 
+
+
     @Override
     public Person get(int id) throws SQLException {
         Connection conn = null;
@@ -92,17 +87,8 @@ public class DAOPersonImpl implements DAOPerson {
                 USER,
                 PASSWORD);
         conn.setAutoCommit(false);
-        String tableName = Person.class.getDeclaredAnnotation(MyTable.class).name();
-        Field[] fields = Person.class.getDeclaredFields();
-        List<String> columns = new ArrayList<>();
-        for (Field field :
-                fields) {
-
-            MyColumn myColumn = field.getAnnotation(MyColumn.class);
-            columns.add(myColumn.name());
-        }
         try {
-            String sqlSelect = "select * from " + tableName + " where " + columns.get(0) + " = '?'" +
+            String sqlSelect = "select * from " + TABLE_NAME + " where " + COLUMNS.get(0) + " = '?'" +
                     "order by id desc";
             sqlSelect = sqlSelect.replace("?", Integer.toString(id));
             preparedStatementSelect = conn.prepareStatement(sqlSelect);
@@ -143,24 +129,13 @@ public class DAOPersonImpl implements DAOPerson {
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatementSelect = null;
         ResultSet rs = null;
-        String tableName = Person.class.getDeclaredAnnotation(MyTable.class).name();
-        Field[] fields = Person.class.getDeclaredFields();
-        List<String> columns = new ArrayList<>();
-        for (Field field :
-                fields) {
-
-            MyColumn myColumn = field.getAnnotation(MyColumn.class);
-            columns.add(myColumn.name());
-
-
-        }
         int rows = 0;
         conn = DriverManager.getConnection(URL,
                 USER,
                 PASSWORD);
         conn.setAutoCommit(false);
         try {
-            String sqlDelete = "delete " + tableName + " from " + tableName + " where " + columns.get(0) + " = '?'";
+            String sqlDelete = "delete " + TABLE_NAME + " from " + TABLE_NAME + " where " + COLUMNS.get(0) + " = '?'";
             sqlDelete = sqlDelete.replace("?", Integer.toString(id));
             preparedStatementSelect = conn.prepareStatement(sqlDelete);
             rows = preparedStatementSelect.executeUpdate();
@@ -200,32 +175,23 @@ public class DAOPersonImpl implements DAOPerson {
                 USER,
                 PASSWORD);
         conn.setAutoCommit(false);
-        try {
-
-            String tableName = Person.class.getDeclaredAnnotation(MyTable.class).name();
-            Field[] fields = Person.class.getDeclaredFields();
-            List<String> columns = new ArrayList<>();
-            for (Field field :
-                    fields) {
-                    MyColumn myColumn = field.getAnnotation(MyColumn.class);
-                    columns.add(myColumn.name());
-            }
-            String sql = "update " + tableName +
-                    " set " + columns.get(1) + " = '?'" +
-                    " where " + columns.get(0) + " = '!'";
+        try{
+            String sql = "update " + TABLE_NAME +
+                    " set " + COLUMNS.get(1) + " = '?'" +
+                    " where " + COLUMNS.get(0) + " = '!'";
             sql = sql.replace("?", person.getName());
             sql = sql.replace("!", Integer.toString(person.getId()));
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            sql = "update " + tableName +
-                    " set " + columns.get(2) + " = '*'" +
-                    " where " + columns.get(0) + " = '!'";
+            sql = "update " + TABLE_NAME +
+                    " set " + COLUMNS.get(2) + " = '*'" +
+                    " where " + COLUMNS.get(0) + " = '!'";
             sql = sql.replace("*", person.getSurname());
             sql = sql.replace("!", Integer.toString(person.getId()));
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            String sqlSelect = "select * from " + tableName +
-                    " order by "+ columns.get(0) + " desc";
+            String sqlSelect = "select * from " + TABLE_NAME +
+                    " order by "+ COLUMNS.get(0) + " desc";
 
             preparedStatementSelect = conn.prepareStatement(sqlSelect);
             rs = preparedStatementSelect.executeQuery();
