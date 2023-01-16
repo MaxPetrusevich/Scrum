@@ -21,13 +21,11 @@ public class DAOPersonImpl implements DAOPerson {
 
     @Override
     public Person save(Person person) throws SQLException, ClassNotFoundException, NoSuchMethodException {
-        Connection conn = null;
+
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatementSelect = null;
         ResultSet rs = null;
-        conn = DriverManager.getConnection(URL,
-                USER,
-                PASSWORD);
+        Connection conn = MyConnection.getConnection();
         conn.setAutoCommit(false);
         try {
             String sql = "insert into " + TABLE_NAME + " (" + COLUMNS.get(1) + " , " + COLUMNS.get(2)
@@ -76,16 +74,15 @@ public class DAOPersonImpl implements DAOPerson {
 
 
 
+
     @Override
     public Person get(int id) throws SQLException {
-        Connection conn = null;
+
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatementSelect = null;
         ResultSet rs = null;
         Person person = null;
-        conn = DriverManager.getConnection(URL,
-                USER,
-                PASSWORD);
+        Connection conn = MyConnection.getConnection();
         conn.setAutoCommit(false);
         try {
             String sqlSelect = "select * from " + TABLE_NAME + " where " + COLUMNS.get(0) + " = '?'" +
@@ -125,14 +122,11 @@ public class DAOPersonImpl implements DAOPerson {
 
     @Override
     public int delete(int id) throws SQLException {
-        Connection conn = null;
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatementSelect = null;
         ResultSet rs = null;
         int rows = 0;
-        conn = DriverManager.getConnection(URL,
-                USER,
-                PASSWORD);
+        Connection conn = MyConnection.getConnection();
         conn.setAutoCommit(false);
         try {
             String sqlDelete = "delete " + TABLE_NAME + " from " + TABLE_NAME + " where " + COLUMNS.get(0) + " = '?'";
@@ -167,13 +161,10 @@ public class DAOPersonImpl implements DAOPerson {
 
     @Override
     public void update(Person person) throws SQLException {
-        Connection conn = null;
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatementSelect = null;
         ResultSet rs = null;
-        conn = DriverManager.getConnection(URL,
-                USER,
-                PASSWORD);
+        Connection conn = MyConnection.getConnection();
         conn.setAutoCommit(false);
         try{
             String sql = "update " + TABLE_NAME +
