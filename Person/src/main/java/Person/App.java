@@ -10,14 +10,14 @@ public class App
 {
     public static void main( String[] args ) throws SQLException, ClassNotFoundException, NoSuchMethodException {
         DAOPerson dao = new DAOPersonImpl();
-        Person person1 = Person.builder().name("Anton").surname("Sidorov").build();
+        Person person1 = Person.builder().name("Test").surname("Person").build();
         dao.save(person1);
-        Person person = dao.get(8);
+        Person person = dao.get(1);
         System.out.println(person);
-        person.setName("Petr");
-        person.setSurname("Ivanov");
+        person.setName("NewTest");
+        person.setSurname("NewPerson");
         dao.update(person);
-        dao.delete(9);
+        dao.delete(1);
 
     }
 }
