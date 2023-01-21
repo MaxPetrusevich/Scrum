@@ -1,23 +1,26 @@
 package Person;
 
+
 import java.sql.SQLException;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args ) throws SQLException, ClassNotFoundException, NoSuchMethodException {
-        DAOPerson dao = new DAOPersonImpl();
+public class App {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException, NoSuchMethodException {
         Person person1 = Person.builder().name("Test").surname("Person").build();
-        dao.save(person1);
-        Person person = dao.get(1);
-        System.out.println(person);
-        person.setName("NewTest");
-        person.setSurname("NewPerson");
-        dao.update(person);
-        dao.delete(1);
+        DataForTable<Person> data = new DataForTable<>(new Person());
+        data.updateInfoInData();
+        DAOPerson dao = new DAOPersonImpl(data);
+        person1 = dao.save(person1);
+        System.out.println("Element was saved " + person1);
+        person1 = dao.get(131);
+        System.out.println("Element was got " + person1);
+        person1.setSurname("Test");
+        person1.setName("Update");
+        dao.update(person1);
+        System.out.println("Element was updated");
+        int rows = dao.delete(131);
+        System.out.println("Element was deleted. Rows affected = " + rows);
+
+
 
     }
 }

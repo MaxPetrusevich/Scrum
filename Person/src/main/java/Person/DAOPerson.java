@@ -1,4 +1,4 @@
 package Person;
 
-public interface DAOPerson extends DAO<Person>{
+public interface DAOPerson extends DAO<Person> {
 }
