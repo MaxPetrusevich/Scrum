@@ -27,7 +27,6 @@ public class DAOImpl<T> implements DAO<T> {
     @Override
     public T save(T object) throws SQLException {
         PreparedStatement preparedStatement = null;
-        PreparedStatement preparedStatementSelect = null;
         ResultSet rs = null;
         data.setObject(object);
         conn.setAutoCommit(false);
@@ -44,30 +43,26 @@ public class DAOImpl<T> implements DAO<T> {
                 method.invoke(object, row);
             }
             String sqlSelect = SQLQuery.getSelectQuery(data);
-            preparedStatementSelect = conn.prepareStatement(sqlSelect);
-            rs = preparedStatementSelect.executeQuery();
+            preparedStatement = conn.prepareStatement(sqlSelect);
+            rs = preparedStatement.executeQuery();
             SQLQuery.viewSelectAllResult(rs, data.getFields());
             conn.commit();
         } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
             conn.rollback();
             e.printStackTrace();
         } finally {
-            finalOfCheckExceptions(preparedStatement, preparedStatementSelect, rs);
+            finalOfCheckExceptions(preparedStatement,  rs);
         }
         return object;
     }
 
-    private void finalOfCheckExceptions(PreparedStatement preparedStatement, PreparedStatement preparedStatementSelect, ResultSet rs) {
+    private void finalOfCheckExceptions(PreparedStatement preparedStatement,  ResultSet rs) {
         try {
             if (rs != null) {
                 rs.close();
             }
             if (preparedStatement != null) {
                 preparedStatement.close();
-            }
-
-            if (preparedStatementSelect != null) {
-                preparedStatementSelect.close();
             }
         } catch (SQLException throwable) {
             throwable.printStackTrace();
@@ -124,7 +119,6 @@ public class DAOImpl<T> implements DAO<T> {
     @Override
     public void update(T object) throws SQLException {
         PreparedStatement preparedStatement = null;
-        PreparedStatement preparedStatementSelect = null;
         ResultSet rs = null;
         data.setObject(object);
         conn.setAutoCommit(false);
@@ -139,15 +133,15 @@ public class DAOImpl<T> implements DAO<T> {
             }
             preparedStatement.executeUpdate();
             String sqlSelect = SQLQuery.getSelectQuery(data);
-            preparedStatementSelect = conn.prepareStatement(sqlSelect);
-            rs = preparedStatementSelect.executeQuery();
+            preparedStatement = conn.prepareStatement(sqlSelect);
+            rs = preparedStatement.executeQuery();
             SQLQuery.viewSelectAllResult(rs, fields);
             conn.commit();
         } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
             conn.rollback();
             e.printStackTrace();
         } finally {
-            finalOfCheckExceptions(preparedStatement, preparedStatementSelect, rs);
+            finalOfCheckExceptions(preparedStatement,  rs);
         }
     }
 

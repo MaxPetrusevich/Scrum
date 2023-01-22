@@ -118,7 +118,6 @@ public class SQLQuery {
                 break;
             }
         }
-        System.out.println(update);
         return update;
     }
 
