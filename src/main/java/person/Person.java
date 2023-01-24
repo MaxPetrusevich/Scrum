@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 /**
  * Physical class.
  * a Person table corresponding to the database.
@@ -31,6 +30,4 @@ public class Person {
     private String name;
     @MyColumn(name = "Surname")
     private String surname;
-
-
 }

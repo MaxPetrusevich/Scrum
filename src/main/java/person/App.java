@@ -25,13 +25,13 @@ public class App {
         DaoPerson dao = new DaoPersonImpl(data);
         person1 = dao.save(person1);
         System.out.println("Element was saved " + person1);
-        person1 = dao.get(21);
+        person1 = dao.get(25);
         System.out.println("Element was got " + person1);
         person1.setSurname("Test");
         person1.setName("Update");
         dao.update(person1);
         System.out.println("Element was updated");
-        int rows = dao.delete(21);
+        int rows = dao.delete(25);
         System.out.println("Element was deleted. Rows affected = " + rows);
 
 
