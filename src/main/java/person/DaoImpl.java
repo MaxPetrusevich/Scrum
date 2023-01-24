@@ -1,37 +1,27 @@
-package person;
+package Person;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-/**
- * The parent class DaoImpl.
- * which provides four basic methods
- * of saving, getting, updating, deleting
- *
- * @author Scrum team
- *
- */
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class DaoImpl<T> implements Dao<T> {
+public class DAOImpl<T> implements DAO<T> {
 
 
     private Connection conn;
     private DataForTable<T> data;
 
-    public DaoImpl(DataForTable<T> data) throws SQLException {
+    public DAOImpl(DataForTable<T> data) throws SQLException {
         this.data = data;
         this.conn = MyConnection.getConnection();
     }
@@ -43,9 +33,9 @@ public class DaoImpl<T> implements Dao<T> {
         data.setObject(object);
         conn.setAutoCommit(false);
         try {
-            String sql = SqlQuery.getInsertQuery(data);
+            String sql = SQLQuery.getInsertQuery(data);
             preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            SqlQuery.setValues(preparedStatement, data);
+            SQLQuery.setValues(preparedStatement, data);
             preparedStatement.executeUpdate();
             rs = preparedStatement.getGeneratedKeys();
             rs.next();
@@ -54,10 +44,10 @@ public class DaoImpl<T> implements Dao<T> {
             if (method != null) {
                 method.invoke(object, row);
             }
-            String sqlSelect = SqlQuery.getSelectQuery(data);
+            String sqlSelect = SQLQuery.getSelectQuery(data);
             preparedStatement = conn.prepareStatement(sqlSelect);
             rs = preparedStatement.executeQuery();
-            SqlQuery.viewSelectAllResult(rs, data.getFields());
+            SQLQuery.viewSelectAllResult(rs, data.getFields());
             conn.commit();
         } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
             conn.rollback();
@@ -100,9 +90,9 @@ public class DaoImpl<T> implements Dao<T> {
         T object = null;
         conn.setAutoCommit(false);
         try {
-            String sqlSelect = SqlQuery.getSelectByIdQuery(data);
+            String sqlSelect = SQLQuery.getSelectByIdQuery(data);
             preparedStatementSelect = conn.prepareStatement(sqlSelect);
-            SqlQuery.setValues(preparedStatementSelect, id);
+            SQLQuery.setValues(preparedStatementSelect, id);
             rs = preparedStatementSelect.executeQuery();
             rs.next();
             object = getObjectFromResultSet(rs);
@@ -138,18 +128,16 @@ public class DaoImpl<T> implements Dao<T> {
             Field[] fields = data.getFields();
             List<String> columns = data.getColumns();
             Integer valuesCount = 1;
-            String updateSql = SqlQuery.getUpdateQuery(data);
-            preparedStatement = conn.prepareStatement(updateSql);
-            System.out.println(updateSql);
+            String updateSQL = SQLQuery.getUpdateQuery(data);
+            preparedStatement = conn.prepareStatement(updateSQL);
             for (int i = 0; i < fields.length; i++) {
-                valuesCount = SqlQuery.setUpdateValue(data,
-                        preparedStatement, fields[i], columns.get(i), valuesCount);
+                valuesCount = SQLQuery.setUpdateValue(data, preparedStatement, fields[i], columns.get(i), valuesCount);
             }
             preparedStatement.executeUpdate();
-            String sqlSelect = SqlQuery.getSelectQuery(data);
+            String sqlSelect = SQLQuery.getSelectQuery(data);
             preparedStatement = conn.prepareStatement(sqlSelect);
             rs = preparedStatement.executeQuery();
-            SqlQuery.viewSelectAllResult(rs, fields);
+            SQLQuery.viewSelectAllResult(rs, fields);
             conn.commit();
         } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
             conn.rollback();
@@ -166,9 +154,9 @@ public class DaoImpl<T> implements Dao<T> {
         int rowsAffected = 0;
         conn.setAutoCommit(false);
         try {
-            String sqlDelete = SqlQuery.getDeleteByIdQuery(data);
+            String sqlDelete = SQLQuery.getDeleteByIdQuery(data);
             preparedStatement = conn.prepareStatement(sqlDelete);
-            SqlQuery.setValues(preparedStatement, id);
+            SQLQuery.setValues(preparedStatement, id);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
@@ -190,8 +178,7 @@ public class DaoImpl<T> implements Dao<T> {
     }
 
     private T getObjectFromResultSet(ResultSet rs)
-            throws SQLException, IllegalAccessException, InvocationTargetException,
-            NoSuchMethodException, InstantiationException {
+            throws SQLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
         Field[] fields = data.getFields();
         Method[] methods = data.getMethods();
         Constructor<?> constructor = data.getObject().getClass().getConstructor();
@@ -201,8 +188,7 @@ public class DaoImpl<T> implements Dao<T> {
             Method method = null;
             for (Method method1 :
                     methods) {
-                if (method1.getName().toLowerCase().compareTo("set"
-                    + fields[i].getName().toLowerCase()) == 0) {
+                if (method1.getName().toLowerCase().compareTo("set" + fields[i].getName().toLowerCase()) == 0) {
                     method = method1;
                     break;
                 }

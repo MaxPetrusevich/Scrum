@@ -3,7 +3,10 @@ package person;
 
 
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.sql.Connection;
 
@@ -12,17 +15,26 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestPerson {
 
 
+    @BeforeAll
+    public void init() throws SQLException, ClassNotFoundException {
+        TestUtil.createPersonTable();
+    }
+
+    @AfterAll
+    public void close() throws SQLException {
+        PreparedStatement ps = TestUtil.getConnection().prepareStatement("delete from person");
+        ps.executeUpdate();
+        ps.close();
+        TestUtil.closeConnection();
+    }
     @Test
     public void shouldSaveAndGet() throws SQLException, ClassNotFoundException, NoSuchMethodException {
 
         Connection conn = new H2ConnectionSupplier().getConnection();
-        PreparedStatement ps = conn.prepareStatement("delete from person");
-        ps.executeUpdate();
-        ps.close();
         Person person1 = Person.builder().name("John").surname("Smith").build();
         DataForTable<Person> data = new DataForTable<>(new Person());
         data.updateInfoInData();
@@ -32,15 +44,10 @@ public class TestPerson {
         assertEquals("Smith", person1.getSurname());
         conn.close();
 
-
-
     }
     @Test
     public void shouldUpdate() throws SQLException, ClassNotFoundException, NoSuchMethodException {
         Connection conn = new H2ConnectionSupplier().getConnection();
-        PreparedStatement ps = conn.prepareStatement("delete from person");
-        ps.executeUpdate();
-        ps.close();
         Person person1 = Person.builder().name("John").surname("Smith").build();
         DataForTable<Person> data = new DataForTable<>(new Person());
         data.updateInfoInData();
@@ -57,9 +64,6 @@ public class TestPerson {
     @Test
     public void shouldDelete() throws SQLException, ClassNotFoundException, NoSuchMethodException {
         Connection conn = new H2ConnectionSupplier().getConnection();
-        PreparedStatement ps = conn.prepareStatement("delete from person");
-        ps.executeUpdate();
-        ps.close();
         Person person1 = Person.builder().name("John").surname("Smith").build();
         DataForTable<Person> data = new DataForTable<>(new Person());
         data.updateInfoInData();

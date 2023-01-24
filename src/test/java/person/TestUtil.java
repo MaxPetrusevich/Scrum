@@ -1,9 +1,11 @@
 package person;
 
+import lombok.Getter;
+
 import java.sql.Connection;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 
 public class TestUtil {
@@ -16,19 +18,21 @@ public class TestUtil {
         connection.close();
     }
 
-
+    public static Connection getConnection(){
+        return connection;
+    }
     public static void createPersonTable() throws SQLException, ClassNotFoundException {
         Class.forName("org.h2.Driver");
         connection = new H2ConnectionSupplier().getConnection();
         connection.setAutoCommit(false);
         try{
-            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE public.person(" +
-                    "id identity primary key," +
-                    "name varchar(25) null," +
-                    "surname varchar(25) null)");
-            preparedStatement.executeQuery();
+            Statement statement = connection.createStatement();
+            statement.executeQuery("create table person( " +
+                     "id identity primary key " +
+                    " name varchar(255) " +
+                    " surname varchar(255))");
             connection.commit();
-            preparedStatement.close();
+            statement.close();
         } catch (SQLException e) {
             connection.rollback();
         }
