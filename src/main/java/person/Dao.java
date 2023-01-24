@@ -1,8 +1,17 @@
-package Person;
+package person;
 
 import java.sql.SQLException;
 
-public interface DAO<T> {
+/**
+ * It is interface Dao with generic class
+ * with basic method
+ * such like: save,
+ * get, update, delete.
+ *
+ * @author Scrum team.
+ *
+ */
+public interface Dao<T> {
     T save(T t) throws SQLException, ClassNotFoundException, NoSuchMethodException;
 
     T get(int id) throws SQLException;
