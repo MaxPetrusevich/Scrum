@@ -2,6 +2,7 @@ package person;
 
 import java.sql.SQLException;
 import lombok.AllArgsConstructor;
+import person.DaoImpl;
 
 /**
  * It is class DaoPersonImpl.

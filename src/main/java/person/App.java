@@ -27,7 +27,7 @@ public class App {
         System.out.println("Element was saved " + person1);
         person1 = dao.get(person1.getId());
         System.out.println("Element was got " + person1);
-        person1.setSurname("Test");
+        person1.setSurname("Person");
         person1.setName("Update");
         dao.update(person1);
         System.out.println("Element was updated");

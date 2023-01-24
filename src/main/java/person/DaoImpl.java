@@ -1,4 +1,4 @@
-package Person;
+package person;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,13 +15,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class DAOImpl<T> implements DAO<T> {
+public class DaoImpl<T> implements Dao<T> {
 
 
     private Connection conn;
     private DataForTable<T> data;
 
-    public DAOImpl(DataForTable<T> data) throws SQLException {
+    public DaoImpl(DataForTable<T> data) throws SQLException {
         this.data = data;
         this.conn = MyConnection.getConnection();
     }
@@ -33,9 +33,9 @@ public class DAOImpl<T> implements DAO<T> {
         data.setObject(object);
         conn.setAutoCommit(false);
         try {
-            String sql = SQLQuery.getInsertQuery(data);
+            String sql = SqlQuery.getInsertQuery(data);
             preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            SQLQuery.setValues(preparedStatement, data);
+            SqlQuery.setValues(preparedStatement, data);
             preparedStatement.executeUpdate();
             rs = preparedStatement.getGeneratedKeys();
             rs.next();
@@ -44,10 +44,10 @@ public class DAOImpl<T> implements DAO<T> {
             if (method != null) {
                 method.invoke(object, row);
             }
-            String sqlSelect = SQLQuery.getSelectQuery(data);
+            String sqlSelect = SqlQuery.getSelectQuery(data);
             preparedStatement = conn.prepareStatement(sqlSelect);
             rs = preparedStatement.executeQuery();
-            SQLQuery.viewSelectAllResult(rs, data.getFields());
+            SqlQuery.viewSelectAllResult(rs, data.getFields());
             conn.commit();
         } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
             conn.rollback();
@@ -90,9 +90,9 @@ public class DAOImpl<T> implements DAO<T> {
         T object = null;
         conn.setAutoCommit(false);
         try {
-            String sqlSelect = SQLQuery.getSelectByIdQuery(data);
+            String sqlSelect = SqlQuery.getSelectByIdQuery(data);
             preparedStatementSelect = conn.prepareStatement(sqlSelect);
-            SQLQuery.setValues(preparedStatementSelect, id);
+            SqlQuery.setValues(preparedStatementSelect, id);
             rs = preparedStatementSelect.executeQuery();
             rs.next();
             object = getObjectFromResultSet(rs);
@@ -128,16 +128,16 @@ public class DAOImpl<T> implements DAO<T> {
             Field[] fields = data.getFields();
             List<String> columns = data.getColumns();
             Integer valuesCount = 1;
-            String updateSQL = SQLQuery.getUpdateQuery(data);
+            String updateSQL = SqlQuery.getUpdateQuery(data);
             preparedStatement = conn.prepareStatement(updateSQL);
             for (int i = 0; i < fields.length; i++) {
-                valuesCount = SQLQuery.setUpdateValue(data, preparedStatement, fields[i], columns.get(i), valuesCount);
+                valuesCount = SqlQuery.setUpdateValue(data, preparedStatement, fields[i], columns.get(i), valuesCount);
             }
             preparedStatement.executeUpdate();
-            String sqlSelect = SQLQuery.getSelectQuery(data);
+            String sqlSelect = SqlQuery.getSelectQuery(data);
             preparedStatement = conn.prepareStatement(sqlSelect);
             rs = preparedStatement.executeQuery();
-            SQLQuery.viewSelectAllResult(rs, fields);
+            SqlQuery.viewSelectAllResult(rs, fields);
             conn.commit();
         } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
             conn.rollback();
@@ -154,9 +154,9 @@ public class DAOImpl<T> implements DAO<T> {
         int rowsAffected = 0;
         conn.setAutoCommit(false);
         try {
-            String sqlDelete = SQLQuery.getDeleteByIdQuery(data);
+            String sqlDelete = SqlQuery.getDeleteByIdQuery(data);
             preparedStatement = conn.prepareStatement(sqlDelete);
-            SQLQuery.setValues(preparedStatement, id);
+            SqlQuery.setValues(preparedStatement, id);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
