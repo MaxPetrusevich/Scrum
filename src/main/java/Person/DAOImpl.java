@@ -2,6 +2,7 @@ package Person;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 import java.lang.reflect.Constructor;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 public class DAOImpl<T> implements DAO<T> {
 
 
@@ -125,11 +127,12 @@ public class DAOImpl<T> implements DAO<T> {
         try {
             Field[] fields = data.getFields();
             List<String> columns = data.getColumns();
-            int valuesCount = 1;
+            Integer valuesCount = 1;
             String updateSQL = SQLQuery.getUpdateQuery(data);
             preparedStatement = conn.prepareStatement(updateSQL);
+            System.out.println(updateSQL);
             for (int i = 0; i < fields.length; i++) {
-                SQLQuery.setUpdateValue(data, preparedStatement, fields[i], columns.get(i), valuesCount);
+                valuesCount = SQLQuery.setUpdateValue(data, preparedStatement, fields[i], columns.get(i), valuesCount);
             }
             preparedStatement.executeUpdate();
             String sqlSelect = SQLQuery.getSelectQuery(data);

@@ -25,8 +25,8 @@ public class SQLQuery {
         }
         insert = insert.replaceFirst("(, )$", ")");
         insert = insert.concat(" Values (");
-        for(String column:
-        columnsName){
+        for (String column :
+                columnsName) {
             if (!(column.toLowerCase().compareTo(ID) == 0)) {
                 insert = insert.concat("?,");
             }
@@ -121,7 +121,7 @@ public class SQLQuery {
         return update;
     }
 
-    public static void setUpdateValue(DataForTable<?> data, PreparedStatement ps, Field field, String column, int valuesCount)
+    public static int setUpdateValue(DataForTable<?> data, PreparedStatement ps, Field field, String column, int valuesCount)
             throws SQLException, IllegalAccessException, InvocationTargetException {
         Method[] methods = data.getMethods();
         if (field.getName().toLowerCase().compareTo(ID) == 0) {
@@ -130,19 +130,19 @@ public class SQLQuery {
                     methods) {
                 if (method.getName().toLowerCase().compareTo("get" + field.getName()) == 0) {
                     ps.setInt(idSetNumber, (Integer) method.invoke(data.getObject()));
-                    return;
                 }
             }
         } else {
-            ps.setString(valuesCount++, column);
             for (Method method :
                     methods) {
                 if (method.getName().toLowerCase().compareTo("get" + field.getName()) == 0) {
-                    setValue(data, ps, field, method, valuesCount++);
-                    return;
+                    setValue(data, ps, field, method, valuesCount);
+                    valuesCount = valuesCount + 1;
+
                 }
             }
         }
+        return valuesCount;
     }
 
 
