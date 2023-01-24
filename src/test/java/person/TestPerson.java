@@ -1,4 +1,4 @@
-package Person;
+package person;
 
 
 
@@ -26,7 +26,7 @@ public class TestPerson {
         Person person1 = Person.builder().name("John").surname("Smith").build();
         DataForTable<Person> data = new DataForTable<>(new Person());
         data.updateInfoInData();
-        DAO<Person> daoPerson = new DAOImpl(conn,data);
+        Dao<Person> daoPerson = new DaoImpl(conn,data);
         person1 = daoPerson.save(person1);
         assertEquals("John", person1.getName());
         assertEquals("Smith", person1.getSurname());
@@ -44,7 +44,7 @@ public class TestPerson {
         Person person1 = Person.builder().name("John").surname("Smith").build();
         DataForTable<Person> data = new DataForTable<>(new Person());
         data.updateInfoInData();
-        DAO<Person> daoPerson = new DAOImpl(conn,data);
+        Dao<Person> daoPerson = new DaoImpl(conn,data);
         person1 = daoPerson.save(person1);
         int id = person1.getId();
         person1.setName("John II");
@@ -63,7 +63,7 @@ public class TestPerson {
         Person person1 = Person.builder().name("John").surname("Smith").build();
         DataForTable<Person> data = new DataForTable<>(new Person());
         data.updateInfoInData();
-        DAO<Person> daoPerson = new DAOImpl(conn,data);
+        Dao<Person> daoPerson = new DaoImpl(conn,data);
         person1 = daoPerson.save(person1);
         int rows = daoPerson.delete(person1.getId());
         assertEquals(1, rows);

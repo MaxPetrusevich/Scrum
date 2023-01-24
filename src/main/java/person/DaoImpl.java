@@ -1,27 +1,37 @@
-package Person;
-
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+package person;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/**
+ * The parent class DaoImpl.
+ * which provides four basic methods
+ * of saving, getting, updating, deleting
+ *
+ * @author Scrum team
+ *
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class DAOImpl<T> implements DAO<T> {
+public class DaoImpl<T> implements Dao<T> {
 
 
     private Connection conn;
     private DataForTable<T> data;
 
-    public DAOImpl(DataForTable<T> data) throws SQLException {
+    public DaoImpl(DataForTable<T> data) throws SQLException {
         this.data = data;
         this.conn = MyConnection.getConnection();
     }
@@ -33,9 +43,9 @@ public class DAOImpl<T> implements DAO<T> {
         data.setObject(object);
         conn.setAutoCommit(false);
         try {
-            String sql = SQLQuery.getInsertQuery(data);
+            String sql = SqlQuery.getInsertQuery(data);
             preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            SQLQuery.setValues(preparedStatement, data);
+            SqlQuery.setValues(preparedStatement, data);
             preparedStatement.executeUpdate();
             rs = preparedStatement.getGeneratedKeys();
             rs.next();
@@ -44,10 +54,10 @@ public class DAOImpl<T> implements DAO<T> {
             if (method != null) {
                 method.invoke(object, row);
             }
-            String sqlSelect = SQLQuery.getSelectQuery(data);
+            String sqlSelect = SqlQuery.getSelectQuery(data);
             preparedStatement = conn.prepareStatement(sqlSelect);
             rs = preparedStatement.executeQuery();
-            SQLQuery.viewSelectAllResult(rs, data.getFields());
+            SqlQuery.viewSelectAllResult(rs, data.getFields());
             conn.commit();
         } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
             conn.rollback();
@@ -90,9 +100,9 @@ public class DAOImpl<T> implements DAO<T> {
         T object = null;
         conn.setAutoCommit(false);
         try {
-            String sqlSelect = SQLQuery.getSelectByIdQuery(data);
+            String sqlSelect = SqlQuery.getSelectByIdQuery(data);
             preparedStatementSelect = conn.prepareStatement(sqlSelect);
-            SQLQuery.setValues(preparedStatementSelect, id);
+            SqlQuery.setValues(preparedStatementSelect, id);
             rs = preparedStatementSelect.executeQuery();
             rs.next();
             object = getObjectFromResultSet(rs);
@@ -128,17 +138,18 @@ public class DAOImpl<T> implements DAO<T> {
             Field[] fields = data.getFields();
             List<String> columns = data.getColumns();
             Integer valuesCount = 1;
-            String updateSQL = SQLQuery.getUpdateQuery(data);
-            preparedStatement = conn.prepareStatement(updateSQL);
-            System.out.println(updateSQL);
+            String updateSql = SqlQuery.getUpdateQuery(data);
+            preparedStatement = conn.prepareStatement(updateSql);
+            System.out.println(updateSql);
             for (int i = 0; i < fields.length; i++) {
-                valuesCount = SQLQuery.setUpdateValue(data, preparedStatement, fields[i], columns.get(i), valuesCount);
+                valuesCount = SqlQuery.setUpdateValue(data,
+                        preparedStatement, fields[i], columns.get(i), valuesCount);
             }
             preparedStatement.executeUpdate();
-            String sqlSelect = SQLQuery.getSelectQuery(data);
+            String sqlSelect = SqlQuery.getSelectQuery(data);
             preparedStatement = conn.prepareStatement(sqlSelect);
             rs = preparedStatement.executeQuery();
-            SQLQuery.viewSelectAllResult(rs, fields);
+            SqlQuery.viewSelectAllResult(rs, fields);
             conn.commit();
         } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
             conn.rollback();
@@ -155,9 +166,9 @@ public class DAOImpl<T> implements DAO<T> {
         int rowsAffected = 0;
         conn.setAutoCommit(false);
         try {
-            String sqlDelete = SQLQuery.getDeleteByIdQuery(data);
+            String sqlDelete = SqlQuery.getDeleteByIdQuery(data);
             preparedStatement = conn.prepareStatement(sqlDelete);
-            SQLQuery.setValues(preparedStatement, id);
+            SqlQuery.setValues(preparedStatement, id);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
@@ -179,7 +190,8 @@ public class DAOImpl<T> implements DAO<T> {
     }
 
     private T getObjectFromResultSet(ResultSet rs)
-            throws SQLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
+            throws SQLException, IllegalAccessException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException {
         Field[] fields = data.getFields();
         Method[] methods = data.getMethods();
         Constructor<?> constructor = data.getObject().getClass().getConstructor();
@@ -189,7 +201,8 @@ public class DAOImpl<T> implements DAO<T> {
             Method method = null;
             for (Method method1 :
                     methods) {
-                if (method1.getName().toLowerCase().compareTo("set" + fields[i].getName().toLowerCase()) == 0) {
+                if (method1.getName().toLowerCase().compareTo("set"
+                    + fields[i].getName().toLowerCase()) == 0) {
                     method = method1;
                     break;
                 }

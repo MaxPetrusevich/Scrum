@@ -1,8 +1,10 @@
-package Person;
+package person;
 
 
 
 import org.junit.jupiter.api.Test;
+import person.MyConnection;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 

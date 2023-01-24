@@ -1,5 +1,4 @@
-package Person;
-
+package person;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -9,11 +8,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SQLQuery {
+/**
+ * It is SqlQuery class.
+ *
+ * @author Scrum team.
+ *
+ */
+public class SqlQuery {
 
 
     public static final String ID = "id";
 
+    /**
+     * It is getInsertQuery method.
+     *
+     * @param data from generic Class
+     *
+     * @return insert.
+     */
     public static String getInsertQuery(DataForTable<?> data) {
         String insert = "INSERT INTO " + data.getTableName() + " (";
         List<String> columnsName = data.getColumns();
@@ -35,6 +47,10 @@ public class SQLQuery {
         return insert;
     }
 
+    /**
+     * It is setValues method.
+     *
+     */
     public static void setValues(PreparedStatement ps, DataForTable<?> data)
             throws IllegalAccessException, InvocationTargetException, SQLException {
         int valuesCount = 1;
@@ -48,7 +64,8 @@ public class SQLQuery {
             Method getter = null;
             for (Method method :
                     getters) {
-                if (method.getName().toLowerCase().compareTo("get" + field.getName().toLowerCase()) == 0) {
+                if (method.getName().toLowerCase().compareTo("get"
+                    + field.getName().toLowerCase()) == 0) {
                     getter = method;
                     break;
                 }
@@ -59,6 +76,14 @@ public class SQLQuery {
     }
 
 
+    public static void setValues(PreparedStatement ps, int id) throws SQLException {
+        ps.setInt(1, id);
+    }
+
+    /**
+     * It is viewSelectAllResult method.
+     *
+     */
     public static void viewSelectAllResult(ResultSet rs, Field[] fields)
             throws SQLException {
         int fieldsCount = fields.length;
@@ -83,6 +108,13 @@ public class SQLQuery {
         return "select * from " + data.getTableName() + " order by id";
     }
 
+    /**
+     * It is getSelectByIdQuery method.
+     *
+     * @param data from generic class
+     *
+     * @return select
+     */
     public static String getSelectByIdQuery(DataForTable<?> data) {
         List<String> columns = data.getColumns();
         String columnName = null;
@@ -96,10 +128,14 @@ public class SQLQuery {
         return "select * from " + data.getTableName() + " where " + columnName + " = ?";
     }
 
-    public static void setValues(PreparedStatement ps, int id) throws SQLException {
-        ps.setInt(1, id);
-    }
 
+    /**
+     * It is getUpdateQuery method.
+     *
+     * @param data from generic class
+     *
+     * @return update
+     */
     public static String getUpdateQuery(DataForTable<?> data)
             throws IllegalAccessException, InvocationTargetException {
         String update = "update " + data.getTableName() + " set ";
@@ -121,7 +157,12 @@ public class SQLQuery {
         return update;
     }
 
-    public static int setUpdateValue(DataForTable<?> data, PreparedStatement ps, Field field, String column, int valuesCount)
+    /**
+     * It is setUpdateValue method.
+     *
+     */
+    public static int setUpdateValue(DataForTable<?> data, PreparedStatement ps,
+                                     Field field, String column, int valuesCount)
             throws SQLException, IllegalAccessException, InvocationTargetException {
         Method[] methods = data.getMethods();
         if (field.getName().toLowerCase().compareTo(ID) == 0) {
@@ -146,7 +187,13 @@ public class SQLQuery {
     }
 
 
-    private static void setValue(DataForTable<?> data, PreparedStatement ps, Field field, Method method, int parameterIndex) throws SQLException, IllegalAccessException, InvocationTargetException {
+    /**
+     * It is setValue method.
+     *
+     */
+    private static void setValue(DataForTable<?> data, PreparedStatement ps, Field field,
+                                 Method method, int parameterIndex) throws SQLException,
+            IllegalAccessException, InvocationTargetException {
         Class<?> type = field.getType();
         if (type == Integer.class || type == Byte.class || type == Short.class) {
             ps.setInt(parameterIndex, (Integer) method.invoke(data.getObject()));
@@ -159,6 +206,11 @@ public class SQLQuery {
         }
     }
 
+    /**
+     * It is getDeleteByIdQuery method.
+     *
+     * @return delete
+     */
     public static String getDeleteByIdQuery(DataForTable<?> data) {
         List<String> columns = data.getColumns();
         String columnName = null;

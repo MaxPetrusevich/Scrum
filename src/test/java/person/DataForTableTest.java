@@ -1,4 +1,4 @@
-package Person;
+package person;
 
 
 import java.lang.reflect.Field;
@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import person.DataForTable;
+import person.MyTable;
+import person.Person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
