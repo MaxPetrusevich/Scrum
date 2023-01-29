@@ -1,6 +1,9 @@
 package person;
 
 import org.junit.Test;
+import person.bean.Person;
+import person.tableAnnotations.MyTable;
+import person.util.DataForTable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

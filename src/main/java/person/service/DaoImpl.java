@@ -1,8 +1,11 @@
-package person;
+package person.service;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import person.dao.Dao;
+import person.util.DataForTable;
+import person.util.MyConnection;
 
 
 import java.lang.reflect.Constructor;
@@ -10,7 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
-import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +21,8 @@ import java.util.List;
 public class DaoImpl<T> implements Dao<T> {
 
 
+    public static final String SET = "set";
+    public static final int COLUMN_SAVE_INDEX = 1;
     private Connection conn;
     private DataForTable<T> data;
 
@@ -39,7 +44,7 @@ public class DaoImpl<T> implements Dao<T> {
             preparedStatement.executeUpdate();
             rs = preparedStatement.getGeneratedKeys();
             rs.next();
-            int row = rs.getInt(1);
+            int row = rs.getInt(COLUMN_SAVE_INDEX);
             Method method = receiveSetId(data);
             if (method != null) {
                 method.invoke(object, row);
@@ -72,9 +77,10 @@ public class DaoImpl<T> implements Dao<T> {
     }
 
     private static Method receiveSetId(DataForTable<?> data) {
+        String primaryKey = data.getPrimaryKey();
         for (Method method1 :
                 data.getMethods()) {
-            if (method1.getName().compareTo("setId") == 0) {
+            if (method1.getName().toLowerCase().compareTo("set" + primaryKey.toLowerCase()) == 0) {
                 return method1;
             }
         }
@@ -126,12 +132,11 @@ public class DaoImpl<T> implements Dao<T> {
         conn.setAutoCommit(false);
         try {
             Field[] fields = data.getFields();
-            List<String> columns = data.getColumns();
             Integer valuesCount = 1;
             String updateSQL = SqlQuery.getUpdateQuery(data);
             preparedStatement = conn.prepareStatement(updateSQL);
             for (int i = 0; i < fields.length; i++) {
-                valuesCount = SqlQuery.setUpdateValue(data, preparedStatement, fields[i], columns.get(i), valuesCount);
+                valuesCount = SqlQuery.setUpdateValue(data, preparedStatement, fields[i],  valuesCount);
             }
             preparedStatement.executeUpdate();
             String sqlSelect = SqlQuery.getSelectQuery(data);
@@ -188,7 +193,7 @@ public class DaoImpl<T> implements Dao<T> {
             Method method = null;
             for (Method method1 :
                     methods) {
-                if (method1.getName().toLowerCase().compareTo("set" + fields[i].getName().toLowerCase()) == 0) {
+                if (method1.getName().toLowerCase().compareTo(SET + fields[i].getName().toLowerCase()) == 0) {
                     method = method1;
                     break;
                 }

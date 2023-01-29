@@ -1,4 +1,4 @@
-package person;
+package person.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import person.tableAnnotations.PrimaryKey;
+import person.tableAnnotations.MyColumn;
+import person.tableAnnotations.MyTable;
 
 /**
  * It is class DataForTable.
@@ -33,6 +36,7 @@ public class DataForTable<T> {
     private List<String> columns;
     private Field[] fields;
     private T object;
+    private String primaryKey;
 
     public DataForTable(T object) {
         this.object = object;
@@ -88,7 +92,18 @@ public class DataForTable<T> {
         }
         return list;
     }
+    public String receivePrimaryKey(){
+        Field[] fields = receiveFields();
+        for (Field field :
+                fields) {
 
+            PrimaryKey primaryKey1 = field.getAnnotation(PrimaryKey.class);
+            if(primaryKey1 != null){
+                return primaryKey1.name();
+            }
+        }
+        return null;
+    }
     /**
      * method updateInfoInData.
      *
@@ -98,5 +113,6 @@ public class DataForTable<T> {
         this.setMethods(this.receiveMethods());
         this.setColumns(this.receiveColumnsName());
         this.setFields(this.receiveFields());
+        this.setPrimaryKey(this.receivePrimaryKey());
     }
 }

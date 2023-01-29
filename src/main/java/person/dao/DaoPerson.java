@@ -1,4 +1,6 @@
-package person;
+package person.dao;
+
+import person.bean.Person;
 
 /**
  * It is interface DaoPerson.
