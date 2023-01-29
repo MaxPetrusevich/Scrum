@@ -7,6 +7,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import person.bean.Person;
+import person.dao.Dao;
+import person.service.DaoImpl;
+import person.util.DataForTable;
 
 import java.sql.Connection;
 

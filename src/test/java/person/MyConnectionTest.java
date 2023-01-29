@@ -2,6 +2,7 @@ package person;
 
 import org.junit.Assert;
 import org.junit.Test;
+import person.util.MyConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

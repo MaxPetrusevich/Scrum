@@ -1,8 +1,10 @@
-package person;
+package person.service;
 
 import java.sql.SQLException;
 import lombok.AllArgsConstructor;
-import person.DaoImpl;
+import person.dao.DaoPerson;
+import person.util.DataForTable;
+import person.bean.Person;
 
 /**
  * It is class DaoPersonImpl.

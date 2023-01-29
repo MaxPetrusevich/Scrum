@@ -1,4 +1,4 @@
-package person;
+package person.tableAnnotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

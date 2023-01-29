@@ -1,4 +1,4 @@
-package person;
+package person.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import person.tableAnnotations.MyColumn;
+import person.tableAnnotations.MyTable;
+import person.tableAnnotations.PrimaryKey;
 
 /**
  * Physical class.
@@ -24,6 +27,7 @@ import lombok.ToString;
 @ToString
 @MyTable(name = "Person")
 public class Person {
+    @PrimaryKey(name = "Id")
     @MyColumn(name = "Id")
     private Integer id;
     @MyColumn(name = "Name")

@@ -1,4 +1,4 @@
-package person;
+package person.dao;
 
 import java.sql.SQLException;
 

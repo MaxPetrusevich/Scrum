@@ -1,4 +1,6 @@
-package person;
+package person.service;
+
+import person.util.DataForTable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -14,10 +16,12 @@ import java.util.List;
  * @author Scrum team.
  *
  */
+import static person.data.Constants.*;
 public class SqlQuery {
 
 
-    public static final String ID = "id";
+
+
 
     /**
      * It is getInsertQuery method.
@@ -27,23 +31,24 @@ public class SqlQuery {
      * @return insert.
      */
     public static String getInsertQuery(DataForTable<?> data) {
-        String insert = "INSERT INTO " + data.getTableName() + " (";
+        String insert = INSERT_INTO + data.getTableName() + OPEN_BRACKET;
+        String primaryKey = data.getPrimaryKey();
         List<String> columnsName = data.getColumns();
         for (String column :
                 columnsName) {
-            if (!(column.toLowerCase().compareTo(ID) == 0)) {
-                insert = insert.concat(column + ", ");
+            if (!(column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0)) {
+                insert = insert.concat(column + COMMA);
             }
         }
-        insert = insert.replaceFirst("(, )$", ")");
-        insert = insert.concat(" Values (");
+        insert = insert.replaceFirst(REGEX_FOR_VALUES, CLOSE_BRACKET);
+        insert = insert.concat(VALUES);
         for (String column :
                 columnsName) {
-            if (!(column.toLowerCase().compareTo(ID) == 0)) {
-                insert = insert.concat("?,");
+            if (!(column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0)) {
+                insert = insert.concat(QUSTION);
             }
         }
-        insert = insert.replaceFirst("(,)$", ")");
+        insert = insert.replaceFirst(REGEX_FOR_END_OF_QUERY, CLOSE_BRACKET);
         return insert;
     }
 
@@ -56,9 +61,10 @@ public class SqlQuery {
         int valuesCount = 1;
         Field[] fields = data.getFields();
         List<Method> getters = data.receiveGetters();
+        String primaryKey = data.getPrimaryKey();
         for (Field field :
                 fields) {
-            if (field.getName().toLowerCase().compareTo(ID) == 0) {
+            if (field.getName().toLowerCase().compareTo(primaryKey.toLowerCase()) == 0){
                 continue;
             }
             Method getter = null;
@@ -118,14 +124,15 @@ public class SqlQuery {
     public static String getSelectByIdQuery(DataForTable<?> data) {
         List<String> columns = data.getColumns();
         String columnName = null;
+        String primaryKey = data.getPrimaryKey();
         for (String column :
                 columns) {
-            if (column.toLowerCase().matches(ID)) {
+            if (column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
                 columnName = column;
                 break;
             }
         }
-        return "select * from " + data.getTableName() + " where " + columnName + " = ?";
+        return SELECT_FROM + data.getTableName() + WHERE + columnName + CONDITION;
     }
 
 
@@ -138,19 +145,20 @@ public class SqlQuery {
      */
     public static String getUpdateQuery(DataForTable<?> data)
             throws IllegalAccessException, InvocationTargetException {
-        String update = "update " + data.getTableName() + " set ";
+        String update = UPDATE + data.getTableName() + SET;
         List<String> columnsName = data.getColumns();
+        String primaryKey = data.getPrimaryKey();
         for (String column :
                 columnsName) {
-            if (!(column.toLowerCase().compareTo(ID) == 0)) {
-                update = update.concat(column + " = ?, ");
+            if (!(column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0)) {
+                update = update.concat(column + SET_FOR_UPDATE);
             }
         }
-        update = update.replaceFirst("(, )$", " where * = ?");
+        update = update.replaceFirst(REGEX_FOR_VALUES, CONDITION_FOR_UPDATE);
         Field[] fields = data.getFields();
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().toLowerCase().compareTo(ID) == 0) {
-                update = update.replace("*", columnsName.get(i));
+            if (fields[i].getName().toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
+                update = update.replace(STAR, columnsName.get(i));
                 break;
             }
         }
@@ -162,21 +170,22 @@ public class SqlQuery {
      *
      */
     public static int setUpdateValue(DataForTable<?> data, PreparedStatement ps,
-                                     Field field, String column, int valuesCount)
+                                     Field field, int valuesCount)
             throws SQLException, IllegalAccessException, InvocationTargetException {
         Method[] methods = data.getMethods();
-        if (field.getName().toLowerCase().compareTo(ID) == 0) {
+        String primaryKey = data.getPrimaryKey();
+        if (field.getName().toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
             int idSetNumber = data.getFields().length;
             for (Method method :
                     methods) {
-                if (method.getName().toLowerCase().compareTo("get" + field.getName()) == 0) {
+                if (method.getName().toLowerCase().compareTo(GET + field.getName()) == 0) {
                     ps.setInt(idSetNumber, (Integer) method.invoke(data.getObject()));
                 }
             }
         } else {
             for (Method method :
                     methods) {
-                if (method.getName().toLowerCase().compareTo("get" + field.getName()) == 0) {
+                if (method.getName().toLowerCase().compareTo(GET + field.getName()) == 0) {
                     setValue(data, ps, field, method, valuesCount);
                     valuesCount = valuesCount + 1;
 
@@ -214,15 +223,14 @@ public class SqlQuery {
     public static String getDeleteByIdQuery(DataForTable<?> data) {
         List<String> columns = data.getColumns();
         String columnName = null;
+        String primaryKey = data.getPrimaryKey();
         for (String column :
                 columns) {
-            if (column.toLowerCase().matches(ID)) {
+            if (column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
                 columnName = column;
                 break;
             }
         }
-        return "delete from " + data.getTableName() + " where " + columnName + " = ?";
+        return DELETE_FROM + data.getTableName() + WHERE + columnName + CONDITION;
     }
-
-
 }
