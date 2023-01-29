@@ -1,5 +1,6 @@
 package person;
 
+import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -8,13 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-import person.DataForTable;
-import person.MyTable;
-import person.Person;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.*;
 
 public class DataForTableTest {
     private Person person = Person.builder().name("John").surname("Connor").build();
