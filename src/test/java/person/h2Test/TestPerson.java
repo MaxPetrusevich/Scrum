@@ -1,11 +1,9 @@
-package person;
+package person.h2Test;
 
 
 
 
 import org.h2.tools.RunScript;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import person.bean.Person;
@@ -17,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.Connection;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +30,7 @@ public class TestPerson {
         Connection conn = new H2ConnectionSupplier().getConnection();
         RunScript.execute(conn, new FileReader("src\\test\\resources\\testPerson.sql"));
         Person person1 = Person.builder().name("John").surname("Smith").build();
-        DataForTable<Person> data = new DataForTable<>(new Person());
+        DataForTable<Person> data = new DataForTable<>(person1);
         data.updateInfoInData();
         Dao<Person> daoPerson = new DaoImpl(conn,data);
         person1 = daoPerson.save(person1);
@@ -47,7 +44,7 @@ public class TestPerson {
         Connection conn = new H2ConnectionSupplier().getConnection();
         RunScript.execute(conn, new FileReader("src\\test\\resources\\testPerson.sql"));
         Person person1 = Person.builder().name("John").surname("Smith").build();
-        DataForTable<Person> data = new DataForTable<>(new Person());
+        DataForTable<Person> data = new DataForTable<>(person1);
         data.updateInfoInData();
         Dao<Person> daoPerson = new DaoImpl(conn,data);
         person1 = daoPerson.save(person1);
@@ -64,7 +61,7 @@ public class TestPerson {
         Connection conn = new H2ConnectionSupplier().getConnection();
         RunScript.execute(conn, new FileReader("src\\test\\resources\\testPerson.sql"));
         Person person1 = Person.builder().name("John").surname("Smith").build();
-        DataForTable<Person> data = new DataForTable<>(new Person());
+        DataForTable<Person> data = new DataForTable<>(person1);
         data.updateInfoInData();
         Dao<Person> daoPerson = new DaoImpl(conn,data);
         person1 = daoPerson.save(person1);
