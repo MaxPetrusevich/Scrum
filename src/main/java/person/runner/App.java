@@ -1,4 +1,9 @@
-package person;
+package person.runner;
+
+import person.bean.Person;
+import person.dao.DaoPerson;
+import person.service.DaoPersonImpl;
+import person.util.DataForTable;
 
 import java.sql.SQLException;
 
