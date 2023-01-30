@@ -1,4 +1,4 @@
-package person;
+package person.h2Test;
 
 
 

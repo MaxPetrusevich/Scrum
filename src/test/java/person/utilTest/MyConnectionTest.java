@@ -1,17 +1,19 @@
-package person;
+package person.utilTest;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import person.util.MyConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MyConnectionTest {
 
     @Test
     public void getConnection() throws SQLException {
         Connection actualConnection = MyConnection.getConnection();
-        Assert.assertNotNull( "connection should be successful", actualConnection);
+        assertNotNull(actualConnection, "connection should be successful");
     }
 }
