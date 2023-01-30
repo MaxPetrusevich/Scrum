@@ -5,23 +5,15 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import person.tableAnnotations.PrimaryKey;
-import person.tableAnnotations.MyColumn;
-import person.tableAnnotations.MyTable;
+import lombok.*;
+import person.annotations.*;
 
 /**
  * It is class DataForTable.
  * Lombok is used here.
  *
  * @author Scrum team.
- *
+ * @version 2.1
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -92,18 +84,24 @@ public class DataForTable<T> {
         }
         return list;
     }
-    public String receivePrimaryKey(){
+
+    /**
+     * method receivePrimaryKey.
+     *
+     */
+    public String receivePrimaryKey() {
         Field[] fields = receiveFields();
         for (Field field :
                 fields) {
 
             PrimaryKey primaryKey1 = field.getAnnotation(PrimaryKey.class);
-            if(primaryKey1 != null){
+            if (primaryKey1 != null) {
                 return primaryKey1.name();
             }
         }
         return null;
     }
+
     /**
      * method updateInfoInData.
      *

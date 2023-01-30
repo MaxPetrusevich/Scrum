@@ -3,7 +3,7 @@ package person.utilTest;
 
 import org.junit.jupiter.api.Test;
 import person.bean.Person;
-import person.tableAnnotations.MyTable;
+import person.annotations.MyTable;
 import person.util.DataForTable;
 
 import java.lang.reflect.Field;

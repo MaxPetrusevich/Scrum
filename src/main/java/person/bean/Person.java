@@ -7,16 +7,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import person.tableAnnotations.MyColumn;
-import person.tableAnnotations.MyTable;
-import person.tableAnnotations.PrimaryKey;
+import person.annotations.MyColumn;
+import person.annotations.MyTable;
+import person.annotations.PrimaryKey;
 
 /**
- * Physical class.
- * a Person table corresponding to the database.
+ *  Physical class.
+ *  a Person table corresponding to the database.
  *
- * @author Scrum team.
- *
+ * @author Scrum team
+ * @version 2.1
  */
 @Builder
 @Setter
@@ -27,11 +27,23 @@ import person.tableAnnotations.PrimaryKey;
 @ToString
 @MyTable(name = "Person")
 public class Person {
+
+    /**
+     * person id.
+     */
     @PrimaryKey(name = "Id")
     @MyColumn(name = "Id")
     private Integer id;
+
+    /**
+     * person name.
+     */
     @MyColumn(name = "Name")
     private String name;
+
+    /**
+     * person surname.
+     */
     @MyColumn(name = "Surname")
     private String surname;
 

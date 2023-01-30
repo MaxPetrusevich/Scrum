@@ -7,8 +7,8 @@ import person.bean.Person;
  * which extends DAO.
  * Has no additional methods inside.
  *
- * @author Scrum team.
- *
+ * @author Scrum team
+ * @version 2.1
  */
 public interface DaoPerson extends Dao<Person> {
 }

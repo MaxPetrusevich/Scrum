@@ -1,5 +1,14 @@
 package person.service;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,19 +17,21 @@ import person.util.DataForTable;
 import person.util.MyConnection;
 
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.*;
 
-
+/**
+ * It is DaoImpl class.
+ *
+ * @author Scrum team
+ * @version 2.1
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 public class DaoImpl<T> implements Dao<T> {
 
-
+    /**
+     * constants.
+     */
     public static final String SET = "set";
     public static final int COLUMN_SAVE_INDEX = 1;
     private Connection conn;
@@ -133,10 +144,11 @@ public class DaoImpl<T> implements Dao<T> {
         try {
             Field[] fields = data.getFields();
             Integer valuesCount = 1;
-            String updateSQL = SqlQuery.getUpdateQuery(data);
-            preparedStatement = conn.prepareStatement(updateSQL);
+            String updateSql = SqlQuery.getUpdateQuery(data);
+            preparedStatement = conn.prepareStatement(updateSql);
             for (int i = 0; i < fields.length; i++) {
-                valuesCount = SqlQuery.setUpdateValue(data, preparedStatement, fields[i],  valuesCount);
+                valuesCount = SqlQuery.setUpdateValue(data,
+                        preparedStatement, fields[i],  valuesCount);
             }
             preparedStatement.executeUpdate();
             String sqlSelect = SqlQuery.getSelectQuery(data);
@@ -183,7 +195,8 @@ public class DaoImpl<T> implements Dao<T> {
     }
 
     private T getObjectFromResultSet(ResultSet rs)
-            throws SQLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
+            throws SQLException, IllegalAccessException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException {
         Field[] fields = data.getFields();
         Method[] methods = data.getMethods();
         Constructor<?> constructor = data.getObject().getClass().getConstructor();
@@ -193,7 +206,8 @@ public class DaoImpl<T> implements Dao<T> {
             Method method = null;
             for (Method method1 :
                     methods) {
-                if (method1.getName().toLowerCase().compareTo(SET + fields[i].getName().toLowerCase()) == 0) {
+                if (method1.getName().toLowerCase().compareTo(SET
+                    + fields[i].getName().toLowerCase()) == 0) {
                     method = method1;
                     break;
                 }

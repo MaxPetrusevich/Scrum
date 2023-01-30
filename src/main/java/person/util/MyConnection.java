@@ -21,7 +21,6 @@ public class MyConnection {
 
     /**
      * Get database connection.
-     *
      */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL,

@@ -11,4 +11,4 @@
  * @version 2.1
  */
 
-package person;
+package person.data;

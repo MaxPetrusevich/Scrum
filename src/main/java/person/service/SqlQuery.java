@@ -1,27 +1,21 @@
 package person.service;
 
-import person.util.DataForTable;
+import static person.data.Constants.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
+import person.util.DataForTable;
+
 
 /**
  * It is SqlQuery class.
  *
  * @author Scrum team.
- *
  */
-import static person.data.Constants.*;
 public class SqlQuery {
-
-
-
-
 
     /**
      * It is getInsertQuery method.
@@ -64,7 +58,7 @@ public class SqlQuery {
         String primaryKey = data.getPrimaryKey();
         for (Field field :
                 fields) {
-            if (field.getName().toLowerCase().compareTo(primaryKey.toLowerCase()) == 0){
+            if (field.getName().toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
                 continue;
             }
             Method getter = null;
