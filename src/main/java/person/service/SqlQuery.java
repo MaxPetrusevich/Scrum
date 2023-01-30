@@ -70,7 +70,7 @@ public class SqlQuery {
             Method getter = null;
             for (Method method :
                     getters) {
-                if (method.getName().toLowerCase().compareTo("get"
+                if (method.getName().toLowerCase().compareTo(GET
                     + field.getName().toLowerCase()) == 0) {
                     getter = method;
                     break;
