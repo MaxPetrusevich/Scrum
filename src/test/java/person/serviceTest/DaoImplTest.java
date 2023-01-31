@@ -6,6 +6,7 @@ import person.bean.Person;
 import person.dao.DaoPerson;
 import person.service.DaoPersonImpl;
 import person.util.DataForTable;
+import util.CreatePerson;
 
 import java.sql.SQLException;
 
@@ -16,7 +17,7 @@ public class DaoImplTest {
 
     @Test
     public void save() throws SQLException, ClassNotFoundException, NoSuchMethodException {
-        Person person = Person.builder().name("John").surname("Connor").build();
+        Person person = CreatePerson.create();
         DataForTable<Person> personData = new DataForTable<>(person);
         DaoPerson personDao = new DaoPersonImpl(personData);
         personData.updateInfoInData();
@@ -27,18 +28,18 @@ public class DaoImplTest {
 
     @Test
     public void get() throws SQLException, ClassNotFoundException, NoSuchMethodException {
-        Person person = Person.builder().name("John").surname("Connor").build();
+        Person person = CreatePerson.create();
         DataForTable<Person> personData = new DataForTable<>(person);
         DaoPerson dao = new DaoPersonImpl(personData);
         personData.updateInfoInData();
         person = dao.save(person);
         Person personFromDB = dao.get(person.getId());
-        assertEquals(personFromDB.getSurname(), "Connor");
+        assertEquals(personFromDB.getSurname(), "Smith");
     }
 
     @Test
     public void update() throws SQLException, ClassNotFoundException, NoSuchMethodException {
-        Person person = Person.builder().name("John").surname("Connor").build();
+        Person person = CreatePerson.create();
         DataForTable<Person> personData = new DataForTable<>(person);
         DaoPerson dao = new DaoPersonImpl(personData);
         personData.updateInfoInData();
@@ -53,7 +54,7 @@ public class DaoImplTest {
 
     @Test
     public void delete() throws SQLException, ClassNotFoundException, NoSuchMethodException {
-        Person person = Person.builder().name("John").surname("Connor").build();
+        Person person = CreatePerson.create();
         DataForTable<Person> personData = new DataForTable<>(person);
         DaoPerson dao = new DaoPersonImpl(personData);
         personData.updateInfoInData();

@@ -12,11 +12,11 @@ import person.annotations.MyTable;
 import person.annotations.PrimaryKey;
 
 /**
- *  Physical class.
- *  a Person table corresponding to the database.
+ * Physical class.
+ * a Person table corresponding to the database.
  *
- * @author Scrum team
- * @version 2.1
+ * @author Scrum team.
+ *
  */
 @Builder
 @Setter
@@ -27,23 +27,11 @@ import person.annotations.PrimaryKey;
 @ToString
 @MyTable(name = "Person")
 public class Person {
-
-    /**
-     * person id.
-     */
     @PrimaryKey(name = "Id")
     @MyColumn(name = "Id")
     private Integer id;
-
-    /**
-     * person name.
-     */
     @MyColumn(name = "Name")
     private String name;
-
-    /**
-     * person surname.
-     */
     @MyColumn(name = "Surname")
     private String surname;
 

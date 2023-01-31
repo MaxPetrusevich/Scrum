@@ -2,9 +2,9 @@ package person.service;
 
 import java.sql.SQLException;
 import lombok.AllArgsConstructor;
-import person.bean.Person;
 import person.dao.DaoPerson;
 import person.util.DataForTable;
+import person.bean.Person;
 
 /**
  * It is class DaoPersonImpl.

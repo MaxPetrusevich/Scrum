@@ -3,7 +3,6 @@ package person.h2Test;
 
 
 
-import lombok.AllArgsConstructor;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,6 +12,7 @@ import person.bean.Person;
 import person.dao.Dao;
 import person.service.DaoImpl;
 import person.util.DataForTable;
+import util.CreatePerson;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -24,11 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestPerson {
+    public static final String WAY_TO_SCRIPT = "src\\test\\resources\\testPerson.sql";
     private Connection conn;
     @BeforeAll
     public void init() throws SQLException, FileNotFoundException {
         conn = new H2ConnectionSupplier().getConnection();
-        RunScript.execute(conn, new FileReader("src\\test\\resources\\testPerson.sql"));
+        RunScript.execute(conn, new FileReader(WAY_TO_SCRIPT));
     }
 
     @AfterAll
@@ -42,7 +43,7 @@ public class TestPerson {
     public void shouldSaveAndGet() throws SQLException, ClassNotFoundException, NoSuchMethodException, FileNotFoundException {
 
 
-        Person person1 = Person.builder().name("John").surname("Smith").build();
+        Person person1 = CreatePerson.create();
         DataForTable<Person> data = new DataForTable<>(person1);
         data.updateInfoInData();
         Dao<Person> daoPerson = new DaoImpl(conn,data);
@@ -52,7 +53,7 @@ public class TestPerson {
     }
     @Test
     public void shouldUpdate() throws SQLException, ClassNotFoundException, NoSuchMethodException, FileNotFoundException {
-        Person person1 = Person.builder().name("John").surname("Smith").build();
+        Person person1 = CreatePerson.create();
         DataForTable<Person> data = new DataForTable<>(person1);
         data.updateInfoInData();
         Dao<Person> daoPerson = new DaoImpl(conn,data);
@@ -66,7 +67,7 @@ public class TestPerson {
     }
     @Test
     public void shouldDelete() throws SQLException, ClassNotFoundException, NoSuchMethodException, FileNotFoundException {
-        Person person1 = Person.builder().name("John").surname("Smith").build();
+        Person person1 = CreatePerson.create();
         DataForTable<Person> data = new DataForTable<>(person1);
         data.updateInfoInData();
         Dao<Person> daoPerson = new DaoImpl(conn,data);

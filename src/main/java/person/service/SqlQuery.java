@@ -1,21 +1,26 @@
 package person.service;
 
-import static person.data.Constants.*;
+import person.util.DataForTable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import person.util.DataForTable;
-
 
 /**
  * It is SqlQuery class.
  *
  * @author Scrum team.
+ *
  */
+import static person.data.Constants.*;
 public class SqlQuery {
+
+
+
+
 
     /**
      * It is getInsertQuery method.
@@ -26,11 +31,11 @@ public class SqlQuery {
      */
     public static String getInsertQuery(DataForTable<?> data) {
         String insert = INSERT_INTO + data.getTableName() + OPEN_BRACKET;
-        String primaryKey = data.getPrimaryKey();
+        Field primaryKey = data.getPrimaryKey();
         List<String> columnsName = data.getColumns();
         for (String column :
                 columnsName) {
-            if (!(column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0)) {
+            if (!(column.toLowerCase().compareTo(primaryKey.getName().toLowerCase()) == 0)) {
                 insert = insert.concat(column + COMMA);
             }
         }
@@ -38,7 +43,7 @@ public class SqlQuery {
         insert = insert.concat(VALUES);
         for (String column :
                 columnsName) {
-            if (!(column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0)) {
+            if (!(column.toLowerCase().compareTo(primaryKey.getName().toLowerCase()) == 0)) {
                 insert = insert.concat(QUSTION);
             }
         }
@@ -54,24 +59,16 @@ public class SqlQuery {
             throws IllegalAccessException, InvocationTargetException, SQLException {
         int valuesCount = 1;
         Field[] fields = data.getFields();
-        List<Method> getters = data.receiveGetters();
-        String primaryKey = data.getPrimaryKey();
+        Field primaryKey = data.getPrimaryKey();
         for (Field field :
                 fields) {
-            if (field.getName().toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
+            if (field.getName().toLowerCase().compareTo(primaryKey.getName().toLowerCase()) == 0){
                 continue;
             }
-            Method getter = null;
-            for (Method method :
-                    getters) {
-                if (method.getName().toLowerCase().compareTo(GET
-                    + field.getName().toLowerCase()) == 0) {
-                    getter = method;
-                    break;
-                }
-            }
-            setValue(data, ps, field, getter, valuesCount);
+            field.setAccessible(true);
+            setValue(data, ps, field,  valuesCount);
             valuesCount++;
+            field.setAccessible(false);
         }
     }
 
@@ -118,10 +115,10 @@ public class SqlQuery {
     public static String getSelectByIdQuery(DataForTable<?> data) {
         List<String> columns = data.getColumns();
         String columnName = null;
-        String primaryKey = data.getPrimaryKey();
+        Field primaryKey = data.getPrimaryKey();
         for (String column :
                 columns) {
-            if (column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
+            if (column.toLowerCase().compareTo(primaryKey.getName().toLowerCase()) == 0) {
                 columnName = column;
                 break;
             }
@@ -141,17 +138,17 @@ public class SqlQuery {
             throws IllegalAccessException, InvocationTargetException {
         String update = UPDATE + data.getTableName() + SET;
         List<String> columnsName = data.getColumns();
-        String primaryKey = data.getPrimaryKey();
+        Field primaryKey = data.getPrimaryKey();
         for (String column :
                 columnsName) {
-            if (!(column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0)) {
+            if (!(column.toLowerCase().compareTo(primaryKey.getName().toLowerCase()) == 0)) {
                 update = update.concat(column + SET_FOR_UPDATE);
             }
         }
         update = update.replaceFirst(REGEX_FOR_VALUES, CONDITION_FOR_UPDATE);
         Field[] fields = data.getFields();
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
+            if (fields[i].getName().toLowerCase().compareTo(primaryKey.getName().toLowerCase()) == 0) {
                 update = update.replace(STAR, columnsName.get(i));
                 break;
             }
@@ -166,26 +163,16 @@ public class SqlQuery {
     public static int setUpdateValue(DataForTable<?> data, PreparedStatement ps,
                                      Field field, int valuesCount)
             throws SQLException, IllegalAccessException, InvocationTargetException {
-        Method[] methods = data.getMethods();
-        String primaryKey = data.getPrimaryKey();
-        if (field.getName().toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
+        Field primaryKey = data.getPrimaryKey();
+        field.setAccessible(true);
+        if (field.getName().toLowerCase().compareTo(primaryKey.getName().toLowerCase()) == 0) {
             int idSetNumber = data.getFields().length;
-            for (Method method :
-                    methods) {
-                if (method.getName().toLowerCase().compareTo(GET + field.getName()) == 0) {
-                    ps.setInt(idSetNumber, (Integer) method.invoke(data.getObject()));
-                }
-            }
+            ps.setInt(idSetNumber, (Integer) field.get(data.getObject()));
         } else {
-            for (Method method :
-                    methods) {
-                if (method.getName().toLowerCase().compareTo(GET + field.getName()) == 0) {
-                    setValue(data, ps, field, method, valuesCount);
+                    setValue(data, ps, field, valuesCount);
                     valuesCount = valuesCount + 1;
-
                 }
-            }
-        }
+        field.setAccessible(false);
         return valuesCount;
     }
 
@@ -195,17 +182,17 @@ public class SqlQuery {
      *
      */
     private static void setValue(DataForTable<?> data, PreparedStatement ps, Field field,
-                                 Method method, int parameterIndex) throws SQLException,
-            IllegalAccessException, InvocationTargetException {
+                                  int parameterIndex) throws SQLException,
+            IllegalAccessException{
         Class<?> type = field.getType();
         if (type == Integer.class || type == Byte.class || type == Short.class) {
-            ps.setInt(parameterIndex, (Integer) method.invoke(data.getObject()));
+            ps.setInt(parameterIndex, field.getInt(data.getObject()));
         } else if (type == Long.class) {
-            ps.setLong(parameterIndex, (Long) method.invoke(data.getObject()));
+            ps.setLong(parameterIndex, field.getLong(data.getObject()));
         } else if (type == Boolean.class) {
-            ps.setBoolean(parameterIndex, (Boolean) method.invoke(data.getObject()));
+            ps.setBoolean(parameterIndex,  field.getBoolean(data.getObject()));
         } else if (type == String.class || type == Character.class) {
-            ps.setString(parameterIndex, (String) method.invoke(data.getObject()));
+            ps.setString(parameterIndex, (String) field.get(data.getObject()));
         }
     }
 
@@ -217,10 +204,10 @@ public class SqlQuery {
     public static String getDeleteByIdQuery(DataForTable<?> data) {
         List<String> columns = data.getColumns();
         String columnName = null;
-        String primaryKey = data.getPrimaryKey();
+        Field primaryKey = data.getPrimaryKey();
         for (String column :
                 columns) {
-            if (column.toLowerCase().compareTo(primaryKey.toLowerCase()) == 0) {
+            if (column.toLowerCase().compareTo(primaryKey.getName().toLowerCase()) == 0) {
                 columnName = column;
                 break;
             }

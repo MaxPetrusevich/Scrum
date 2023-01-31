@@ -1,24 +1,25 @@
 package person.runner;
 
-import java.sql.SQLException;
 import person.bean.Person;
 import person.dao.DaoPerson;
 import person.service.DaoPersonImpl;
 import person.util.DataForTable;
 
+import java.sql.SQLException;
+
 /**
- * It is Application DAO class.
+ * It is class App
  * where we realize the logic
  * of our app.
  *
- * @author Scrum team
- * @version 2.1
+ * @author Scrum team.
+ *
  */
 public class App {
 
     /**
      * It is main method without args.
-     * Using builder pattern we are trying
+     * Using builder pattern wir trying
      * to realize all methods.
      */
     public static void main(String[] args) throws SQLException,

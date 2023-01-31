@@ -1,11 +1,5 @@
 package person.data;
 
-/**
- * Class with predefined constants.
- *
- * @author Scrum team
- * @version 2.1
- */
 public class Constants {
     public static final String INSERT_INTO = "INSERT INTO ";
     public static final String OPEN_BRACKET = " (";
