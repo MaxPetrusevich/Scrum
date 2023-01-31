@@ -48,7 +48,11 @@ public class DataForTable<T> {
     }
 
 
-
+    /**
+     * method receiveColumnsName.
+     *
+     * @return list.
+     */
     public List<String> receiveColumnsName() {
         Field[] fields = receiveFields();
         List<String> list = new ArrayList<>();
@@ -60,6 +64,10 @@ public class DataForTable<T> {
         }
         return list;
     }
+    /**
+     * method receivePrimaryKey.
+     *
+     */
     public Field receivePrimaryKey(){
         Field[] fields = receiveFields();
         for (Field field :

@@ -19,7 +19,9 @@ import java.sql.*;
 @Setter
 public class DaoImpl<T> implements Dao<T> {
 
-
+    /**
+     * constants.
+     */
     public static final String SET = "set";
     public static final int COLUMN_SAVE_INDEX = 1;
     private Connection conn;
