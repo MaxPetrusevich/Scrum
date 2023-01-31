@@ -11,7 +11,6 @@ import person.util.MyConnection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.*;
 
 
@@ -45,10 +44,10 @@ public class DaoImpl<T> implements Dao<T> {
             rs = preparedStatement.getGeneratedKeys();
             rs.next();
             int row = rs.getInt(COLUMN_SAVE_INDEX);
-            Method method = receiveSetId(data);
-            if (method != null) {
-                method.invoke(object, row);
-            }
+            Field primaryKey = data.getPrimaryKey();
+            primaryKey.setAccessible(true);
+            primaryKey.set(object, row);
+            primaryKey.setAccessible(false);
             String sqlSelect = SqlQuery.getSelectQuery(data);
             preparedStatement = conn.prepareStatement(sqlSelect);
             rs = preparedStatement.executeQuery();
@@ -76,16 +75,6 @@ public class DaoImpl<T> implements Dao<T> {
         }
     }
 
-    private static Method receiveSetId(DataForTable<?> data) {
-        String primaryKey = data.getPrimaryKey();
-        for (Method method1 :
-                data.getMethods()) {
-            if (method1.getName().toLowerCase().compareTo("set" + primaryKey.toLowerCase()) == 0) {
-                return method1;
-            }
-        }
-        return null;
-    }
 
 
     @Override
@@ -135,8 +124,9 @@ public class DaoImpl<T> implements Dao<T> {
             Integer valuesCount = 1;
             String updateSQL = SqlQuery.getUpdateQuery(data);
             preparedStatement = conn.prepareStatement(updateSQL);
-            for (int i = 0; i < fields.length; i++) {
-                valuesCount = SqlQuery.setUpdateValue(data, preparedStatement, fields[i],  valuesCount);
+            for (Field field:
+            fields) {
+                valuesCount = SqlQuery.setUpdateValue(data, preparedStatement, field,  valuesCount);
             }
             preparedStatement.executeUpdate();
             String sqlSelect = SqlQuery.getSelectQuery(data);
@@ -185,32 +175,23 @@ public class DaoImpl<T> implements Dao<T> {
     private T getObjectFromResultSet(ResultSet rs)
             throws SQLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
         Field[] fields = data.getFields();
-        Method[] methods = data.getMethods();
         Constructor<?> constructor = data.getObject().getClass().getConstructor();
         T object = (T) constructor.newInstance(null);
         for (int i = 0; i < fields.length; i++) {
             Class<?> type = fields[i].getType();
-            Method method = null;
-            for (Method method1 :
-                    methods) {
-                if (method1.getName().toLowerCase().compareTo(SET + fields[i].getName().toLowerCase()) == 0) {
-                    method = method1;
-                    break;
-                }
-            }
-            if (method != null) {
-                if (type == Integer.class || type == Byte.class || type == Short.class) {
-                    method.invoke(object, rs.getInt(i + 1));
-                } else if (type == Long.class) {
-                    method.invoke(object, rs.getLong(i + 1));
-                } else if (type == Boolean.class) {
-                    method.invoke(object, rs.getBoolean(i + 1));
-                } else if (type == String.class || type == Character.class) {
-                    method.invoke(object, rs.getString(i + 1));
-                }
-            }
+            fields[i].setAccessible(true);
 
-        }
+            if (type == Integer.class || type == Byte.class || type == Short.class) {
+                    fields[i].set(object, rs.getInt(i + 1));
+                } else if (type == Long.class) {
+                    fields[i].set(object, rs.getLong(i + 1));
+                } else if (type == Boolean.class) {
+                    fields[i].set(object,  rs.getBoolean(i + 1));
+                } else if (type == String.class || type == Character.class) {
+                    fields[i].set(object, rs.getString(i + 1));
+                }
+            fields[i].setAccessible(false);
+            }
         return object;
     }
 }
