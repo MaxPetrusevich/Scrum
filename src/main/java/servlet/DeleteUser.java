@@ -28,10 +28,6 @@ public class DeleteUser extends HttpServlet {
         req.setAttribute("users", personService.findAll());
         req.getRequestDispatcher("jsp/users.jsp").forward(req, resp);
 
-//        resp.setContentType("text/html;charset=UTF-8");
-//        int id = Integer.parseInt(req.getParameter("id"));
-//        PersonDAO db = new PersonDAO();
-//        db.delete(id);
-//        resp.sendRedirect("jsp/users.jsp"); users?
+
     }
 }
