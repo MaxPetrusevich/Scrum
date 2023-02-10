@@ -1,6 +1,7 @@
 package personDao.service;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import personDao.dao.Dao;
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
+@Getter
 public class DaoImpl<T> implements Dao<T> {
 
     /**

@@ -10,19 +10,19 @@
 <body>
 <div class="w3-container" style="margin-left:10px; width:400px;">
     <h3 class="title w3-text-black">
-        <span>Update user</span>
+        <span>Обновить данные пользователя</span>
     </h3>
     <form action="update" method="post">
-        <input class="w3-input w3-border" required name="Id" placeholder="Enter Id">
+        <input type = "hidden" required name = "userId" value= ${requestScope.userId}>
         <br>
-        <input class="w3-input w3-border" required name="firstName" placeholder="Enter First Name">
+        <input class="w3-input w3-border" required name="firstName"  value="${requestScope.firstName}">
         <br>
-        <input class="w3-input w3-border" required name="lastName" placeholder="Enter Last Name">
+        <input class="w3-input w3-border" required name="lastName" value="${requestScope.lastName}">
         <br>
-        <button class="w3-button w3-round btn-block w3-green" type="submit">Submit</button>
+        <button class="w3-button w3-round btn-block w3-green" type="submit">Изменить</button>
     </form>
     <div>
-        <button class="w3-btn w3-light-blue w3-round-large" onclick="location.href='/Person_war_exploded/users'">Users</button>
+        <button class="w3-btn w3-light-blue w3-round-large" onclick="location.href='/Person_war_exploded/users'">Список пользователей</button>
     </div>
 </div>
 </body>

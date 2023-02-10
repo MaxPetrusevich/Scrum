@@ -8,24 +8,18 @@
 </head>
 <body>
 <div class="w3-container" style="margin-left:10px; width:400px;">
-    <%
-        Person user = (Person) request.getAttribute("user");
-        if (user != null) {
-            out.println("<p>User '" + user.getName() + " " + user.getSurname() + "' added!</p>");
-        }
-    %>
     <h3 class="title w3-text-black">
-        <span>Add user</span>
+        <span>Добавить пользователя</span>
     </h3>
     <form action="add" method="post">
-        <input class="w3-input w3-border" required name="firstName" placeholder="Enter First Name">
+        <input class="w3-input w3-border" required name="firstName" placeholder="Введите имя">
         <br>
-        <input class="w3-input w3-border" required name="lastName" placeholder="Enter Last Name">
+        <input class="w3-input w3-border" required name="lastName" placeholder="Введите фамилию">
         <br>
-        <button class="w3-button w3-round btn-block w3-green" type="submit">Submit</button>
+        <button class="w3-button w3-round btn-block w3-green" type="submit">Подтвердить</button>
     </form>
     <div>
-        <button class="w3-btn w3-light-blue w3-round-large" onclick="location.href='/Person_war_exploded/users'">Users</button>
+        <button class="w3-btn w3-light-blue w3-round-large" onclick="location.href='/Person_war_exploded/users'">Список пользователей</button>
     </div>
 </div>
 </body>

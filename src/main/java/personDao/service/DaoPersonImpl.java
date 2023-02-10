@@ -1,5 +1,6 @@
 package personDao.service;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,6 +24,9 @@ public class DaoPersonImpl extends DaoImpl<Person> implements DaoPerson {
 
     public DaoPersonImpl(DataForTable<Person> data) throws SQLException {
         super(data);
+    }
+    public DaoPersonImpl(Connection conn, DataForTable<Person> data){
+        super(conn,data);
     }
 
 }

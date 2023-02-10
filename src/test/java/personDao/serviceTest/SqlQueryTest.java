@@ -18,7 +18,7 @@ public class SqlQueryTest {
     public static final String TEST_SELECT_BY_ID = "select * from Person where Id = ?";
     public static final String TEST_UPDATE = "update Person set Name = ?, Surname = ? where Id = ?";
     public static final String TEST_DELETE = "delete from Person where Id = ?";
-    private Connection conn;
+
 
 
     @Test

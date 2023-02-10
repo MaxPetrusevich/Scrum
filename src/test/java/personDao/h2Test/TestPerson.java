@@ -12,6 +12,7 @@ import personDao.bean.Person;
 import personDao.dao.Dao;
 import personDao.service.DaoImpl;
 import personDao.util.DataForTable;
+import personDao.util.MyConnection;
 import util.CreatePerson;
 
 import java.io.FileNotFoundException;
@@ -25,10 +26,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestPerson {
     public static final String WAY_TO_SCRIPT = "src\\test\\resources\\testPerson.sql";
+    public static final String JOHN = "John";
+    public static final String SMITH = "Smith";
+    public static final String JOHN_II = "John II";
     private Connection conn;
     @BeforeAll
     public void init() throws SQLException, FileNotFoundException {
-        conn = new H2ConnectionSupplier().getConnection();
+        conn =  MyConnection.getConnection();
         RunScript.execute(conn, new FileReader(WAY_TO_SCRIPT));
     }
 
@@ -48,8 +52,8 @@ public class TestPerson {
         data.updateInfoInData();
         Dao<Person> daoPerson = new DaoImpl(conn,data);
         person1 = daoPerson.save(person1);
-        assertEquals("John", person1.getName());
-        assertEquals("Smith", person1.getSurname());
+        assertEquals(JOHN, person1.getName());
+        assertEquals(SMITH, person1.getSurname());
     }
     @Test
     public void shouldUpdate() throws SQLException, ClassNotFoundException, NoSuchMethodException, FileNotFoundException {
@@ -59,10 +63,10 @@ public class TestPerson {
         Dao<Person> daoPerson = new DaoImpl(conn,data);
         person1 = daoPerson.save(person1);
         int id = person1.getId();
-        person1.setName("John II");
+        person1.setName(JOHN_II);
         daoPerson.update(person1);
         person1 = daoPerson.get(id);
-        assertEquals("John II", person1.getName());
+        assertEquals(JOHN_II, person1.getName());
 
     }
     @Test
