@@ -16,42 +16,52 @@
     <div class="w3-container">
         <h2 class="title w3-text-black">Список пользователей</h2>
         <c:choose>
-        <c:when test="${requestScope.users.size() > 0}">
-            <table class="w3-table-all w3-hoverable">
-                <tr>
-                    <th>Id</th><th>Имя</th><th>Фамилия</th>
-                </tr>
-            <c:forEach var="user" items="${requestScope.users}" varStatus="status">
-                <tr>
-                    <td >${status.count}</td><td>${user.name}</td><td>${user.surname}</td>
-                    <td>
-                        <form action = "dispatcher" method = "get">
-                            <input type = "hidden" required name = "userId" value = ${user.id}>
-                            <input type = "hidden" required name = "firstName" value = ${user.name}>
-                            <input type = "hidden" required name = "lastName" value = ${user.surname}>
-                            <button type = "submit" class ="w3-button w3-circle w3-teal">Редактировать</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form action = "dispatcher" method = "post">
-                            <input type = "hidden"  required name = "userId" value = ${user.id}>
-                            <button type = "submit" class ="w3-button w3-circle w3-teal">Удалить</button>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-            </table>
-        </c:when>
+            <c:when test="${requestScope.users.size() > 0}">
+                <table class="w3-table-all w3-hoverable">
+                    <tr>
+                        <th>Id</th>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                    </tr>
+                    <c:forEach var="user" items="${requestScope.users}" varStatus="status">
+                        <tr>
+                            <td>${status.count}</td>
+                            <td>${user.name}</td>
+                            <td>${user.surname}</td>
+                            <td>
+                                <form action="main" method="get">
+                                    <input type="hidden" required name="command" value="Update">
+                                    <input type="hidden" required name="userId" value= ${user.id}>
+                                    <input type="hidden" required name="firstName" value= ${user.name}>
+                                    <input type="hidden" required name="lastName" value= ${user.surname}>
+                                    <button type="submit" class="w3-button w3-circle w3-teal">Редактировать</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="main" method="post">
+                                    <input type="hidden" required name="userId" value= ${user.id}>
+                                    <input type="hidden" required name="command" value="Delete">
+                                    <button type="submit" class="w3-button w3-circle w3-teal">Удалить</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </c:when>
             <c:otherwise>
-                <div class = "emptyList">
+                <div class="emptyList">
                     <h2>Список пользователей пуст!</h2>
                 </div>
             </c:otherwise>
         </c:choose>
         <br>
         <div style="align-content: center">
-            <button class="w3-btn w3-green w3-round-large" onclick="location.href='/Person_war_exploded/add'">Добавить пользователя
-            </button>
+            <form action="main" method="get">
+                <input type ="hidden" required name="command" value = "Add">
+                <button class="w3-btn w3-green w3-round-large">
+                    Добавить пользователя
+                </button>
+            </form>
         </div>
     </div>
 </div>

@@ -11,16 +11,18 @@
     <h3 class="title w3-text-black">
         <span>Добавить пользователя</span>
     </h3>
-    <form action="add" method="post">
+    <form action="main" method="post">
         <input class="w3-input w3-border" required name="firstName" placeholder="Введите имя">
         <br>
         <input class="w3-input w3-border" required name="lastName" placeholder="Введите фамилию">
         <br>
-        <button class="w3-button w3-round btn-block w3-green" type="submit">Подтвердить</button>
+        <input type = "hidden" required name="command" value = "Add">
+        <button class="w3-button w3-round btn-block w3-green" type="submit" >Подтвердить</button>
     </form>
-    <div>
-        <button class="w3-btn w3-light-blue w3-round-large" onclick="location.href='/Person_war_exploded/users'">Список пользователей</button>
-    </div>
+    <form action="main" method ="get">
+        <input type = "hidden" required name = "command" value="Select">
+        <button class="w3-btn w3-light-blue w3-round-large" type = "submit">Список пользователей</button>
+    </form>
 </div>
 </body>
 </html>
