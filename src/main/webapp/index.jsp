@@ -14,10 +14,10 @@
                 Добавить пользователя
             </button>
         </form>
-        <form action="main" method = "get">
-            <input type = "hidden" required name="command" value = "Select">
+        <form action="main" method="get">
+            <input type="hidden" required name="command" value="Select">
             <button class="w3-btn w3-light-blue w3-round-large"
-                   type = "submit">
+                    type="submit">
                 Список пользователей
             </button>
         </form>

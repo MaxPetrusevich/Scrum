@@ -15,16 +15,17 @@ import static servlet.Constants.*;
 public class MainServlet extends HttpServlet {
 
     private String command;
-    private  Command commandExecutor;
+    private Command commandExecutor;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        command =  req.getParameter(COMMAND);
-        if(ADD.compareTo(command) == 0){
+        command = req.getParameter(COMMAND);
+        if (ADD.compareTo(command) == 0) {
             req.getRequestDispatcher(ADD_JSP_WAY).forward(req, resp);
-        } else if (SELECT.compareTo(command) == 0){
+        } else if (SELECT.compareTo(command) == 0) {
             commandExecutor = new SelectCommand();
-            commandExecutor.execute(req,resp);
-        } else if(UPDATE.compareTo(command) == 0){
+            commandExecutor.execute(req, resp);
+        } else if (UPDATE.compareTo(command) == 0) {
             req.setAttribute(ID, req.getParameter(ID));
             req.setAttribute(FIRST_NAME, req.getParameter(FIRST_NAME));
             req.setAttribute(LAST_NAME, req.getParameter(LAST_NAME));
@@ -34,20 +35,20 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        command =  req.getParameter(COMMAND);
-        if(ADD.compareTo(command) == 0){
+        command = req.getParameter(COMMAND);
+        if (ADD.compareTo(command) == 0) {
             commandExecutor = new SaveCommand();
-            commandExecutor.execute(req,resp);
-        } else if (SELECT.compareTo(command) == 0){
+            commandExecutor.execute(req, resp);
+        } else if (SELECT.compareTo(command) == 0) {
             commandExecutor = new SelectCommand();
-            commandExecutor.execute(req,resp);
-        } else if(UPDATE.compareTo(command) == 0){
+            commandExecutor.execute(req, resp);
+        } else if (UPDATE.compareTo(command) == 0) {
             commandExecutor = new UpdateCommand();
-            commandExecutor.execute(req,resp);
-        } else if(DELETE.compareTo(command) == 0){
+            commandExecutor.execute(req, resp);
+        } else if (DELETE.compareTo(command) == 0) {
             req.setAttribute(ID, req.getParameter(ID));
             commandExecutor = new DeleteCommand();
-            commandExecutor.execute(req,resp);
+            commandExecutor.execute(req, resp);
         }
     }
 }

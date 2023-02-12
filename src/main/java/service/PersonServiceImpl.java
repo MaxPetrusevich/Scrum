@@ -15,6 +15,7 @@ import java.util.List;
 
 
 import static java.util.stream.Collectors.toList;
+
 @Getter
 public class PersonServiceImpl implements PersonService {
     private static final PersonServiceImpl INSTANCE = new PersonServiceImpl();

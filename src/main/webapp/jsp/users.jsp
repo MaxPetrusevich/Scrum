@@ -57,7 +57,7 @@
         <br>
         <div style="align-content: center">
             <form action="main" method="get">
-                <input type ="hidden" required name="command" value = "Add">
+                <input type="hidden" required name="command" value="Add">
                 <button class="w3-btn w3-green w3-round-large">
                     Добавить пользователя
                 </button>

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import static servlet.Constants.LIST_NAME;
 import static servlet.Constants.USERS_JSP_WAY;
 
-public class UpdateCommand implements Command{
+public class UpdateCommand implements Command {
     @SneakyThrows
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {

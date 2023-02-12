@@ -11,7 +11,7 @@ import java.util.List;
 import static servlet.Constants.LIST_NAME;
 import static servlet.Constants.USERS_JSP_WAY;
 
-public class SelectCommand implements Command{
+public class SelectCommand implements Command {
     @SneakyThrows
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {

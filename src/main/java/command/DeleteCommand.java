@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static servlet.Constants.*;
 
-public class DeleteCommand implements Command{
+public class DeleteCommand implements Command {
     @SneakyThrows
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {

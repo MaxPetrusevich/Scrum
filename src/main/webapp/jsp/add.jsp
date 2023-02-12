@@ -16,12 +16,12 @@
         <br>
         <input class="w3-input w3-border" required name="lastName" placeholder="Введите фамилию">
         <br>
-        <input type = "hidden" required name="command" value = "Add">
-        <button class="w3-button w3-round btn-block w3-green" type="submit" >Подтвердить</button>
+        <input type="hidden" required name="command" value="Add">
+        <button class="w3-button w3-round btn-block w3-green" type="submit">Подтвердить</button>
     </form>
-    <form action="main" method ="get">
-        <input type = "hidden" required name = "command" value="Select">
-        <button class="w3-btn w3-light-blue w3-round-large" type = "submit">Список пользователей</button>
+    <form action="main" method="get">
+        <input type="hidden" required name="command" value="Select">
+        <button class="w3-btn w3-light-blue w3-round-large" type="submit">Список пользователей</button>
     </form>
 </div>
 </body>
