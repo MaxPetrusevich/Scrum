@@ -1,6 +1,6 @@
 package util;
 
-import personDao.bean.Person;
+import bean.Person;
 
 public class CreatePerson {
 

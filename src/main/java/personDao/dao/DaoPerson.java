@@ -1,9 +1,6 @@
 package personDao.dao;
 
-import personDao.bean.Person;
-
-import java.sql.ResultSet;
-import java.util.List;
+import bean.Person;
 
 /**
  * It is interface DaoPerson.

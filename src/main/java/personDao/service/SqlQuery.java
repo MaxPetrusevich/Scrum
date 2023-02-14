@@ -177,11 +177,12 @@ public class SqlQuery {
                                  int parameterIndex) throws SQLException,
             IllegalAccessException {
         Class<?> type = field.getType();
+        System.out.println(type.getName());
         if (type == Integer.class || type == Byte.class || type == Short.class) {
             ps.setInt(parameterIndex, field.getInt(data.getObject()));
         } else if (type == Long.class) {
             ps.setLong(parameterIndex, field.getLong(data.getObject()));
-        } else if (type == Boolean.class) {
+        } else if (type.isPrimitive()) {
             ps.setBoolean(parameterIndex, field.getBoolean(data.getObject()));
         } else if (type == String.class || type == Character.class) {
             ps.setString(parameterIndex, (String) field.get(data.getObject()));

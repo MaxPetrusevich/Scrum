@@ -2,7 +2,7 @@ package mapper;
 
 import dto.PersonDto;
 import org.mapstruct.Mapper;
-import personDao.bean.Person;
+import bean.Person;
 
 @Mapper
 public interface PersonMapper {

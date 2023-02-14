@@ -1,4 +1,4 @@
-<%@ page import="personDao.bean.Person" %>
+<%@ page import="bean.Person" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>

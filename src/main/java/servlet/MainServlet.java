@@ -14,6 +14,15 @@ import static servlet.Constants.*;
 @WebServlet("/main")
 public class MainServlet extends HttpServlet {
 
+    public static final String LOGIN_REG = "LoginReg";
+    public static final String LOGIN_AUTO = "LoginAuto";
+    public static final String NAME = "Name";
+    public static final String EMAIL = "Email";
+    public static final String PASSWORD = "Password";
+    public static final String ACTION = "action";
+    public static final String REG = "Reg";
+    public static final String AUTO = "Auto";
+
     private String command;
     private Command commandExecutor;
 
@@ -30,6 +39,13 @@ public class MainServlet extends HttpServlet {
             req.setAttribute(FIRST_NAME, req.getParameter(FIRST_NAME));
             req.setAttribute(LAST_NAME, req.getParameter(LAST_NAME));
             req.getRequestDispatcher(UPDATE_JSP_WAY).forward(req, resp);
+        }
+        else if (LOGIN_REG.compareTo(command) == 0){
+            req.setAttribute(ACTION, REG);
+            req.getRequestDispatcher(LOGIN_JSP_WAY).forward(req, resp);
+        } else if(LOGIN_AUTO.compareTo(command) == 0){
+            req.setAttribute(ACTION, AUTO);
+            req.getRequestDispatcher(LOGIN_JSP_WAY).forward(req, resp);
         }
     }
 
@@ -49,6 +65,17 @@ public class MainServlet extends HttpServlet {
             req.setAttribute(ID, req.getParameter(ID));
             commandExecutor = new DeleteCommand();
             commandExecutor.execute(req, resp);
+        } else if(LOGIN_REG.compareTo(command) == 0){
+            req.setAttribute(NAME, req.getParameter(NAME));
+            req.setAttribute(EMAIL, req.getParameter(EMAIL));
+            req.setAttribute(PASSWORD, req.getParameter(PASSWORD));
+            commandExecutor = new LoginRegCommand();
+            commandExecutor.execute(req,resp);
+        } else if(LOGIN_AUTO.compareTo(command) == 0){
+            req.setAttribute(EMAIL, req.getParameter(EMAIL));
+            req.setAttribute(PASSWORD, req.getParameter(PASSWORD));
+            commandExecutor = new LoginAutoCommand();
+            commandExecutor.execute(req,resp);
         }
     }
 }

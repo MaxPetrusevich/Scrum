@@ -8,7 +8,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import personDao.bean.Person;
+import bean.Person;
 import personDao.dao.Dao;
 import personDao.service.DaoImpl;
 import personDao.util.DataForTable;

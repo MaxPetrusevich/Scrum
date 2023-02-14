@@ -1,13 +1,12 @@
 package personDao.serviceTest;
 
 import org.junit.jupiter.api.Test;
-import personDao.bean.Person;
+import bean.Person;
 import personDao.service.SqlQuery;
 import personDao.util.DataForTable;
 import util.CreatePerson;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -46,6 +46,7 @@ public class DaoImpl<T> implements Dao<T> {
             String sql = SqlQuery.getInsertQuery(data);
             preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             SqlQuery.setValues(preparedStatement, data);
+            System.out.println(sql);
             preparedStatement.executeUpdate();
             rs = preparedStatement.getGeneratedKeys();
             rs.next();
@@ -194,7 +195,7 @@ public class DaoImpl<T> implements Dao<T> {
                     fields[i].set(object, rs.getInt(i + 1));
                 } else if (type == Long.class) {
                     fields[i].set(object, rs.getLong(i + 1));
-                } else if (type == Boolean.class) {
+                } else if (type.isPrimitive()) {
                     fields[i].set(object,  rs.getBoolean(i + 1));
                 } else if (type == String.class || type == Character.class) {
                     fields[i].set(object, rs.getString(i + 1));

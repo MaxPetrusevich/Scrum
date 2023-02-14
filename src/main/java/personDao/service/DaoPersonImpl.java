@@ -1,14 +1,12 @@
 package personDao.service;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import personDao.dao.DaoPerson;
 import personDao.util.DataForTable;
-import personDao.bean.Person;
+import bean.Person;
 
 /**
  * It is class DaoPersonImpl.

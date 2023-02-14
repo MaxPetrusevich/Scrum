@@ -3,7 +3,7 @@ package personDao.utilTest;
 
 import org.junit.jupiter.api.Test;
 import personDao.annotations.MyTable;
-import personDao.bean.Person;
+import bean.Person;
 import personDao.util.DataForTable;
 import util.CreatePerson;
 

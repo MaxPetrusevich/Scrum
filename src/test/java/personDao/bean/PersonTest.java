@@ -1,5 +1,6 @@
 package personDao.bean;
 
+import bean.Person;
 import org.junit.jupiter.api.Test;
 import util.CreatePerson;
 
@@ -73,9 +74,5 @@ class PersonTest {
     void builder() {
         assertNotNull(Person.builder().build());
     }
-    @Test
-     void canEqual(){
-        Person person = CreatePerson.create();
-        assertTrue(person.canEqual(CreatePerson.create()));
-     }
+
 }

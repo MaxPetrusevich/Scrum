@@ -6,8 +6,7 @@ import dto.PersonDto;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import mapper.PersonMapperImpl;
-import personDao.bean.Person;
-import personDao.dao.DaoPerson;
+import bean.Person;
 import personDao.service.DaoPersonImpl;
 import personDao.util.DataForTable;
 
