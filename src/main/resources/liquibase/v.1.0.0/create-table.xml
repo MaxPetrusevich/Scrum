@@ -4,14 +4,29 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="create-table-liquibase" author="doncoffee">
-        <createTable tableName="liquibase">
+    <changeSet id="create-table-liquibase" author="Maks">
+        <createTable tableName="person">
             <column name="id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
             <column name="surname" type="varchar(255)"/>
         </createTable>
+        <createTable tableName="user">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="role" type="tinyint(1)"/>
+        </createTable>
+        <insert tableName="user">
+            <column name="name">admin</column>
+            <column name="email">admin</column>
+            <column name="password">admin</column>
+            <column name="role">1</column>
+        </insert>
     </changeSet>
 
 </databaseChangeLog>

@@ -15,5 +15,13 @@ public class Constants {
     public static final String UPDATE = "Update";
     public static final String DELETE = "Delete";
     public static final String LOGIN_JSP_WAY = "jsp/login.jsp";
+    public static final String LOGIN_REG = "LoginReg";
+    public static final String LOGIN_AUTO = "LoginAuto";
+    public static final String NAME = "Name";
+    public static final String EMAIL = "Email";
+    public static final String PASSWORD = "Password";
+    public static final String ACTION = "action";
+    public static final String REG = "Reg";
+    public static final String AUTO = "Auto";
 
 }
