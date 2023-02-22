@@ -13,6 +13,9 @@
         <span>Обновить данные пользователя</span>
     </h3>
     <form action="main" method="post">
+
+        <input type="hidden" required name="status" value="${requestScope.status}">
+        <input type="hidden" required name="role" value="${requestScope.role}">
         <input type="hidden" required name="userId" value= ${requestScope.userId}>
         <br>
         <input class="w3-input w3-border" required name="firstName" value="${requestScope.firstName}">
@@ -23,6 +26,9 @@
         <button class="w3-button w3-round btn-block w3-green" type="submit">Изменить</button>
     </form>
     <form action="main" method="get">
+
+        <input type="hidden" required name="status" value="${requestScope.status}">
+        <input type="hidden" required name="role" value="${requestScope.role}">
         <input type="hidden" required name="command" value="Select">
         <button class="w3-btn w3-light-blue w3-round-large">Список пользователей</button>
     </form>

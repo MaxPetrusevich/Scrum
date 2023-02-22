@@ -12,6 +12,9 @@
         <span>Добавить пользователя</span>
     </h3>
     <form action="main" method="post">
+
+        <input type="hidden" required name="status" value="${requestScope.status}">
+        <input type="hidden" required name="role" value="${requestScope.role}">
         <input class="w3-input w3-border" required name="firstName" placeholder="Введите имя">
         <br>
         <input class="w3-input w3-border" required name="lastName" placeholder="Введите фамилию">
@@ -20,6 +23,9 @@
         <button class="w3-button w3-round btn-block w3-green" type="submit">Подтвердить</button>
     </form>
     <form action="main" method="get">
+
+        <input type="hidden" required name="status" value="${requestScope.status}">
+        <input type="hidden" required name="role" value="${requestScope.role}">
         <input type="hidden" required name="command" value="Select">
         <button class="w3-btn w3-light-blue w3-round-large" type="submit">Список пользователей</button>
     </form>

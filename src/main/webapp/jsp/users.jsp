@@ -38,6 +38,9 @@
                                             <input type="hidden" required name="command" value="Update">
                                             <input type="hidden" required name="userId" value= ${user.id}>
                                             <input type="hidden" required name="firstName" value= ${user.name}>
+
+                                            <input type="hidden" required name="status" value="${requestScope.status}">
+                                            <input type="hidden" required name="role" value="${requestScope.role}">
                                             <input type="hidden" required name="lastName"
                                                    value= ${user.surname}>
                                             <button type="submit" class="w3-button w3-circle w3-teal">
@@ -47,6 +50,9 @@
                                     </td>
                                     <td>
                                         <form action="main" method="post">
+
+                                            <input type="hidden" required name="status" value="${requestScope.status}">
+                                            <input type="hidden" required name="role" value="${requestScope.role}">
                                             <input type="hidden" required name="userId" value= ${user.id}>
                                             <input type="hidden" required name="command" value="Delete">
                                             <button type="submit" class="w3-button w3-circle w3-teal">Удалить
@@ -66,6 +72,9 @@
                 <div style="align-content: center">
                     <form action="main" method="get">
                         <input type="hidden" required name="command" value="Add">
+
+                        <input type="hidden" required name="status" value="${requestScope.status}">
+                        <input type="hidden" required name="role" value="${requestScope.role}">
                         <button class="w3-btn w3-green w3-round-large">
                             Добавить пользователя
                         </button>
