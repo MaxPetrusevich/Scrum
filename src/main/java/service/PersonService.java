@@ -13,4 +13,8 @@ public interface PersonService {
 
     PersonDto findById(Integer id);
 
+    List<PersonDto> findLimit(int currentPage, int countRecords);
+
+    Integer getCountRows();
+
 }

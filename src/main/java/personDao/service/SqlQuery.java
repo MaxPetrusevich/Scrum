@@ -101,6 +101,14 @@ public class SqlQuery {
         return String.join("", "select * from ", data.getTableName(), " order by id");
     }
 
+    public static String getSelectLimitQuery(DataForTable<?> data) {
+        return String.join("", "select * from ", data.getTableName(), " limit %s, %s");
+    }
+
+    public static String getCountQuery(DataForTable<?> data) {
+        return String.join("", "select COUNT(id) from ", data.getTableName());
+    }
+
     /**
      * It is getSelectByIdQuery method.
      *
@@ -206,13 +214,5 @@ public class SqlQuery {
             }
         }
         return String.join("", DELETE_FROM, data.getTableName(), WHERE, columnName, CONDITION);
-    }
-
-    public static String getSelectLimitQuery(DataForTable<?> data) {
-        return String.join("", "select * from ", data.getTableName(), " limit %s, %s");
-    }
-
-    public static String getCountQuery(DataForTable<?> data) {
-        return String.join("", "select COUNT(id) from ", data.getTableName());
     }
 }

@@ -12,7 +12,7 @@ import personDao.annotations.PrimaryKey;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-@MyTable(name = "users")
+@MyTable(name = "user")
 public class User {
     @PrimaryKey(name = "Id")
     @MyColumn(name = "Id")

@@ -2,6 +2,7 @@ package command;
 
 import dto.PersonDto;
 import lombok.SneakyThrows;
+import service.PersonService;
 import service.PersonServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +17,27 @@ public class SelectCommand implements Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         PersonServiceImpl personServiceImpl = PersonServiceImpl.getInstance();
-        List<PersonDto> list = personServiceImpl.findAll();
-        req.setAttribute(LIST_NAME, list);
+
+        String currentPageS = req.getParameter("currentPage");
+
+        int currentPage = (currentPageS==null)?1:Integer.parseInt(currentPageS);
+        int recordsPerPage = 3;
+
+        int rows = personServiceImpl.getCountRows();
+        int countPages = rows / recordsPerPage;
+        if (rows % recordsPerPage > 0) {
+            countPages++;
+        }
+
+        req.setAttribute("countPages", countPages);
+        req.setAttribute("currentPage", currentPage);
+        req.setAttribute("recordsPerPage", recordsPerPage);
+
+        req.setAttribute(LIST_NAME, personServiceImpl.findLimit((currentPage-1)*recordsPerPage,recordsPerPage));
+
+
+//        List<PersonDto> list = personServiceImpl.findAll();
+//        req.setAttribute(LIST_NAME, list);
         req.getRequestDispatcher(USERS_JSP_WAY).forward(req, resp);
     }
 }
