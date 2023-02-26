@@ -18,6 +18,8 @@ import static servlet.Constants.USERS_JSP_WAY;
 public class LoginAutoCommand implements Command{
 
 
+    public static final int FIRST_PAGE = 1;
+    public static final int RECORDS_PER_PAGE = 3;
 
     @SneakyThrows
     @Override
@@ -26,8 +28,8 @@ public class LoginAutoCommand implements Command{
         authorization.signIn(req);
         PersonService personService = PersonServiceImpl.getInstance();
 
-        int currentPage = 1;
-        int recordsPerPage = 3;
+        int currentPage = FIRST_PAGE;
+        int recordsPerPage = RECORDS_PER_PAGE;
 
         int rows = personService.getCountRows();
         int countPages = rows / recordsPerPage;
@@ -39,7 +41,7 @@ public class LoginAutoCommand implements Command{
         req.setAttribute("currentPage", currentPage);
         req.setAttribute("recordsPerPage", recordsPerPage);
 
-        req.setAttribute("users", personService.findLimit(0,recordsPerPage));
+        req.setAttribute("users", personService.findLimit(currentPage,recordsPerPage));
         req.getRequestDispatcher(USERS_JSP_WAY).forward(req,resp);
     }
 }

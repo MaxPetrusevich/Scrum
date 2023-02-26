@@ -42,7 +42,7 @@
                                             <input type="hidden" required name="status" value="${requestScope.status}">
                                             <input type="hidden" required name="role" value="${requestScope.role}">
                                             <input type="hidden" name="recordsPerPage" value="${requestScope.recordsPerPage}">
-                                            <input type="hidden" name="currentPage" value="${requestScope.currentPage+1}">
+                                            <input type="hidden" name="currentPage" value="${requestScope.currentPage}">
                                             <input type="hidden" required name="lastName"
                                                    value= ${user.surname}>
                                             <button type="submit" class="w3-button w3-circle w3-teal">
@@ -56,7 +56,7 @@
                                             <input type="hidden" required name="status" value="${requestScope.status}">
                                             <input type="hidden" required name="role" value="${requestScope.role}">
                                             <input type="hidden" name="recordsPerPage" value="${requestScope.recordsPerPage}">
-                                            <input type="hidden" name="currentPage" value="${requestScope.currentPage+1}">
+                                            <input type="hidden" name="currentPage" value="${requestScope.currentPage}">
                                             <input type="hidden" required name="userId" value= ${user.id}>
                                             <input type="hidden" required name="command" value="Delete">
                                             <button type="submit" class="w3-button w3-circle w3-teal">Удалить
@@ -79,8 +79,8 @@
 
                         <input type="hidden" required name="status" value="${requestScope.status}">
                         <input type="hidden" required name="role" value="${requestScope.role}">
-                        <input type="hidden" name="recordsPerPage" value="${requestScope.recordsPerPage}">
-                        <input type="hidden" name="currentPage" value="${requestScope.currentPage+1}">
+                        <input type="hidden" name="recordsPerPage" value=${requestScope.recordsPerPage}>
+                        <input type="hidden" name="currentPage" value=${requestScope.currentPage}>
                         <button class="w3-btn w3-green w3-round-large">
                             Добавить пользователя
                         </button>
@@ -132,16 +132,19 @@
         </div>
 
 
-<form action="main" method="post">
+<%--<form action="main" method="post">--%>
 <ul>
+    <form action="main" method="post">
   <c:if test="${currentPage!=1}">
       <input type="hidden" required name="status" value="${requestScope.status}">
       <input type="hidden" required name="role" value="${requestScope.role}">
-      <input type="hidden" name="recordsPerPage" value=${requestScope.recordsPerPage}>
-      <input type="hidden" name="currentPage" value=${requestScope.currentPage-1}>
+      <input type="hidden" name="recordsPerPage" value=${recordsPerPage}>
+      <input type="hidden" name="currentPage" value=${currentPage-1}>
       <button type="submit" name="command" value="Select">Previous</button>
   </c:if>
+      </form>
 
+    <form action="main" method="post">
     <c:forEach begin="1" end="${countPages}" var="i">
         <c:choose>
             <c:when test="${currentPage eq i}">
@@ -151,18 +154,20 @@
             </c:when>
         </c:choose>
     </c:forEach>
+        </form>
 
+    <form action="main" method="post">
     <c:if test="${currentPage lt countPages}">
         <li>
             <input type="hidden" required name="status" value="${requestScope.status}">
             <input type="hidden" required name="role" value="${requestScope.role}">
-            <input type="hidden" name="recordsPerPage" value=${requestScope.recordsPerPage}>
-            <input type="hidden" name="currentPage" value="${requestScope.currentPage+1}">
+            <input type="hidden" name="recordsPerPage" value=${recordsPerPage}>
+            <input type="hidden" name="currentPage" value=${currentPage+1}>
             <button type="submit" name="command" value="Select">Next</button>
     </c:if>
+            </form>
 </ul>
 
-</form>
-
+<%--</form>--%>
         </body>
         </html>

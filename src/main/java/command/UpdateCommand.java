@@ -18,7 +18,24 @@ public class UpdateCommand implements Command {
         PersonServiceImpl personServiceImpl = PersonServiceImpl.getInstance();
         PersonDto personDto = Converter.convert(req);
         personServiceImpl.update(personDto);
-        req.setAttribute(LIST_NAME, personServiceImpl.findAll());
+//        req.setAttribute(LIST_NAME, personServiceImpl.findAll());
+        String currentPageS = req.getParameter("currentPage");
+
+        int currentPage = (currentPageS==null)?1:Integer.parseInt(currentPageS);
+        int recordsPerPage = 3;
+
+        int rows = personServiceImpl.getCountRows();
+        int countPages = rows / recordsPerPage;
+        if (rows % recordsPerPage > 0) {
+            countPages++;
+        }
+
+        req.setAttribute("countPages", countPages);
+        req.setAttribute("currentPage", currentPage);
+        req.setAttribute("recordsPerPage", recordsPerPage);
+
+        req.setAttribute(LIST_NAME, personServiceImpl.findLimit(currentPage,recordsPerPage));
+
         req.getRequestDispatcher(USERS_JSP_WAY).forward(req, resp);
     }
 }

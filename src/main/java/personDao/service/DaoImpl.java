@@ -189,7 +189,7 @@ public class DaoImpl<T> implements Dao<T> {
         String sqlSelect = SqlQuery.getSelectLimitQuery(data);
 
         int start = currentPage * countRecords - countRecords;
-        sqlSelect=String.format(sqlSelect,currentPage,countRecords);
+        sqlSelect=String.format(sqlSelect,start,countRecords);
 
         List<T> resultList = new ArrayList<>();
         try {

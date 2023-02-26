@@ -15,6 +15,8 @@
 
         <input type="hidden" required name="status" value="${requestScope.status}">
         <input type="hidden" required name="role" value="${requestScope.role}">
+        <input type="hidden" name="recordsPerPage" value=${requestScope.recordsPerPage}>
+        <input type="hidden" name="currentPage" value=${requestScope.currentPage}>
         <input class="w3-input w3-border" required name="firstName" placeholder="Введите имя">
         <br>
         <input class="w3-input w3-border" required name="lastName" placeholder="Введите фамилию">
@@ -26,6 +28,8 @@
 
         <input type="hidden" required name="status" value="${requestScope.status}">
         <input type="hidden" required name="role" value="${requestScope.role}">
+        <input type="hidden" name="recordsPerPage" value=${recordsPerPage}>
+        <input type="hidden" name="currentPage" value=${currentPage}>
         <input type="hidden" required name="command" value="Select">
         <button class="w3-btn w3-light-blue w3-round-large" type="submit">Список пользователей</button>
     </form>

@@ -33,11 +33,10 @@ public class SelectCommand implements Command {
         req.setAttribute("currentPage", currentPage);
         req.setAttribute("recordsPerPage", recordsPerPage);
 
-        req.setAttribute(LIST_NAME, personServiceImpl.findLimit((currentPage-1)*recordsPerPage,recordsPerPage));
-
-
 //        List<PersonDto> list = personServiceImpl.findAll();
 //        req.setAttribute(LIST_NAME, list);
+        req.setAttribute(LIST_NAME, personServiceImpl.findLimit(currentPage,recordsPerPage));
+
         req.getRequestDispatcher(USERS_JSP_WAY).forward(req, resp);
     }
 }

@@ -42,7 +42,8 @@ public class PersonServiceImpl implements PersonService {
     @SneakyThrows
     @Override
     public List<PersonDto> findLimit(int currentPage, int countRecords) {
-        return personDao.selectLimit(currentPage,countRecords).stream()
+        List<Person> personList = personDao.selectLimit(currentPage, countRecords);
+        return personList.stream()
                 .map(person -> mapper.personToPersonDto(person)
                 )
                 .collect(toList());
