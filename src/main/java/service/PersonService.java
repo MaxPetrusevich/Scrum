@@ -15,6 +15,8 @@ public interface PersonService {
 
     List<PersonDto> findLimit(int currentPage, int countRecords);
 
+    List<PersonDto> findLimitOrderByField(int currentPage, int countRecords,String field);
+
     Integer getCountRows();
 
 }

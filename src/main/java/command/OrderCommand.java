@@ -1,20 +1,21 @@
 package command;
 
-import dto.PersonDto;
+import converter.Converter;
 import lombok.SneakyThrows;
 import service.PersonService;
 import service.PersonServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 import static servlet.Constants.LIST_NAME;
 import static servlet.Constants.USERS_JSP_WAY;
+import static servlet.MainServlet.FIELD;
 
-public class SelectCommand implements Command {
+public class OrderCommand implements Command{
     public static final String CURRENT_PAGE = "currentPage";
     public static final String FIELD = "field";
+    PersonService personService = PersonServiceImpl.getInstance();
     @SneakyThrows
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {

@@ -24,6 +24,7 @@ public interface Dao<T> {
     List<T> selectAll() throws SQLException;
 
     List<T> selectLimit(int currentPage, int countRecords) throws SQLException;
+    List<T> selectLimitOrder(int currentPage, int countRecords,String field) throws SQLException;
 
     Integer getNumberOfRows() throws SQLException;
 }

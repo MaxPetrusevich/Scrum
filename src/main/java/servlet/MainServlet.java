@@ -17,6 +17,8 @@ public class MainServlet extends HttpServlet {
 
     public static final String GET = "GET";
     public static final String POST = "POST";
+    public static final String ORDER = "order";
+    public static final String FIELD = "field";
     private String command;
     private Command commandExecutor;
 
@@ -44,12 +46,28 @@ public class MainServlet extends HttpServlet {
             loginRegCommand(req,resp);
         } else if (LOGIN_AUTO.compareTo(command) == 0) {
             loginAutoCommand(req,resp);
+        } else if(ORDER.compareTo(command) == 0){
+            orderCommand(req,resp);
         }
+    }
+
+    protected void orderCommand(HttpServletRequest req, HttpServletResponse resp) {
+        req.setAttribute("role", req.getParameter("role"));
+        req.setAttribute("status", req.getParameter("status"));
+        req.setAttribute(FIELD, req.getParameter(FIELD));
+
+        req.setAttribute("currentPage", req.getParameter("currentPage"));
+        req.setAttribute("recordsPerPage", req.getParameter("recordsPerPage"));
+
+        commandExecutor = new OrderCommand();
+        commandExecutor.execute(req,resp);
+
     }
 
     protected void addCommand(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("role", req.getParameter("role"));
         req.setAttribute("status", req.getParameter("status"));
+        req.setAttribute(FIELD, req.getParameter(FIELD));
 
         req.setAttribute("currentPage", req.getParameter("currentPage"));
         req.setAttribute("recordsPerPage", req.getParameter("recordsPerPage"));
@@ -65,6 +83,7 @@ public class MainServlet extends HttpServlet {
     protected void selectCommand(HttpServletRequest req, HttpServletResponse resp) {
         req.setAttribute("role", req.getParameter("role"));
         req.setAttribute("status", req.getParameter("status"));
+        req.setAttribute(FIELD, req.getParameter(FIELD));
 
         commandExecutor = new SelectCommand();
         commandExecutor.execute(req, resp);
@@ -73,6 +92,7 @@ public class MainServlet extends HttpServlet {
     protected void updateCommand(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("role", req.getParameter("role"));
         req.setAttribute("status", req.getParameter("status"));
+        req.setAttribute(FIELD, req.getParameter(FIELD));
 
         req.setAttribute("currentPage", req.getParameter("currentPage"));
         req.setAttribute("recordsPerPage", req.getParameter("recordsPerPage"));
@@ -92,6 +112,8 @@ public class MainServlet extends HttpServlet {
         if (POST.equals(req.getMethod())) {
             req.setAttribute("role", req.getParameter("role"));
             req.setAttribute("status", req.getParameter("status"));
+            req.setAttribute(FIELD, req.getParameter(FIELD));
+
             req.setAttribute(ID, req.getParameter(ID));
             commandExecutor = new DeleteCommand();
             commandExecutor.execute(req, resp);
@@ -101,6 +123,7 @@ public class MainServlet extends HttpServlet {
     protected void loginRegCommand(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("role", req.getParameter("role"));
         req.setAttribute("status", req.getParameter("status"));
+
         if (GET.equals(req.getMethod())) {
             req.setAttribute(ACTION, REG);
             req.getRequestDispatcher(LOGIN_JSP_WAY).forward(req, resp);

@@ -23,8 +23,10 @@ public class SqlQuery {
 
     public static final String SELECT_FROM = "select * from ";
     public static final String LIMIT = " limit %s, %s";
+    public static final String LIMIT_ORDER = " order by %s limit %s, %s";
     public static final String ORDER_BY_ID = " order by id";
     public static final String SELECT_COUNT_ID_FROM = "select COUNT(id) from ";
+
 
     /**
      * It is getInsertQuery method.
@@ -111,7 +113,12 @@ public class SqlQuery {
         return String.join("", SELECT_FROM, data.getTableName(), LIMIT);
     }
 
-    public static String getCountQuery(DataForTable<?> data) {
+    public static String getSelectLimitOrderQuery(DataForTable<?> data, String field) {
+        return String.join("", SELECT_FROM, data.getTableName(), LIMIT_ORDER);
+    }
+
+
+        public static String getCountQuery(DataForTable<?> data) {
         return String.join("", SELECT_COUNT_ID_FROM, data.getTableName());
     }
 

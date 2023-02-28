@@ -51,6 +51,16 @@ public class PersonServiceImpl implements PersonService {
 
     @SneakyThrows
     @Override
+    public List<PersonDto> findLimitOrderByField(int currentPage, int countRecords,String field) {
+        List<Person> personList = personDao.selectLimitOrder(currentPage, countRecords, field);
+        return personList.stream()
+                .map(person -> mapper.personToPersonDto(person)
+                )
+                .collect(toList());
+    }
+
+    @SneakyThrows
+    @Override
     public Integer getCountRows() {
         return personDao.getNumberOfRows();
     }
