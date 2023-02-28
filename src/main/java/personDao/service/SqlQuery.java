@@ -1,5 +1,6 @@
 package personDao.service;
 
+import personDao.data.Constants;
 import personDao.util.DataForTable;
 
 import java.lang.reflect.Field;
@@ -18,6 +19,13 @@ import java.util.List;
 import static personDao.data.Constants.*;
 
 public class SqlQuery {
+
+
+    public static final String SELECT_FROM = "select * from ";
+    public static final String LIMIT = " limit %s, %s";
+    public static final String LIMIT_ORDER = " order by %s limit %s, %s";
+    public static final String ORDER_BY_ID = " order by id";
+    public static final String SELECT_COUNT_ID_FROM = "select COUNT(id) from ";
 
 
     /**
@@ -98,7 +106,20 @@ public class SqlQuery {
 
 
     public static String getSelectQuery(DataForTable<?> data) {
-        return String.join("", "select * from ", data.getTableName(), " order by id");
+        return String.join("", SELECT_FROM, data.getTableName(), ORDER_BY_ID);
+    }
+
+    public static String getSelectLimitQuery(DataForTable<?> data) {
+        return String.join("", SELECT_FROM, data.getTableName(), LIMIT);
+    }
+
+    public static String getSelectLimitOrderQuery(DataForTable<?> data, String field) {
+        return String.join("", SELECT_FROM, data.getTableName(), LIMIT_ORDER);
+    }
+
+
+        public static String getCountQuery(DataForTable<?> data) {
+        return String.join("", SELECT_COUNT_ID_FROM, data.getTableName());
     }
 
     /**
@@ -118,7 +139,7 @@ public class SqlQuery {
                 break;
             }
         }
-        return String.join("", SELECT_FROM, data.getTableName(), WHERE, columnName, CONDITION);
+        return String.join("", Constants.SELECT_FROM, data.getTableName(), WHERE, columnName, CONDITION);
     }
 
 

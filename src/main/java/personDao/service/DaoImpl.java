@@ -182,6 +182,84 @@ public class DaoImpl<T> implements Dao<T> {
         return resultList;
     }
 
+    //add pageings
+    public List<T> selectLimit(int currentPage, int countRecords) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        String sqlSelect = SqlQuery.getSelectLimitQuery(data);
+
+        int start = currentPage * countRecords - countRecords;
+        sqlSelect=String.format(sqlSelect,start,countRecords);
+
+        List<T> resultList = new ArrayList<>();
+        try {
+            conn.setAutoCommit(false);
+            preparedStatement = conn.prepareStatement(sqlSelect);
+            rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                resultList.add(getObjectFromResultSet(rs));
+            }
+            conn.commit();
+        } catch (SQLException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 InstantiationException e) {
+            conn.rollback();
+        } finally {
+            finalOfCheckExceptions(preparedStatement, rs);
+        }
+        return resultList;
+    }
+
+    @Override
+    public List<T> selectLimitOrder(int currentPage, int countRecords, String field) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        String sqlSelect = SqlQuery.getSelectLimitOrderQuery(data,field);
+
+        int start = currentPage * countRecords - countRecords;
+        sqlSelect=String.format(sqlSelect,field,start,countRecords);
+
+        List<T> resultList = new ArrayList<>();
+        try {
+            conn.setAutoCommit(false);
+            preparedStatement = conn.prepareStatement(sqlSelect);
+            rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                resultList.add(getObjectFromResultSet(rs));
+            }
+            conn.commit();
+        } catch (SQLException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 InstantiationException e) {
+            conn.rollback();
+        } finally {
+            finalOfCheckExceptions(preparedStatement, rs);
+        }
+        return resultList;
+    }
+
+
+    @Override
+    public Integer getNumberOfRows() throws SQLException {
+        int result = 0;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        String sqlSelect = SqlQuery.getCountQuery(data);
+
+        try {
+            conn.setAutoCommit(false);
+            preparedStatement = conn.prepareStatement(sqlSelect);
+            rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+        } finally {
+            finalOfCheckExceptions(preparedStatement, rs);
+        }
+        return result;
+    }
+
     private T getObjectFromResultSet(ResultSet rs)
             throws SQLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
         Field[] fields = data.getFields();

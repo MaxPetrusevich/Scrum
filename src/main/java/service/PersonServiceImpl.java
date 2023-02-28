@@ -38,6 +38,33 @@ public class PersonServiceImpl implements PersonService {
                 .collect(toList());
     }
 
+
+    @SneakyThrows
+    @Override
+    public List<PersonDto> findLimit(int currentPage, int countRecords) {
+        List<Person> personList = personDao.selectLimit(currentPage, countRecords);
+        return personList.stream()
+                .map(person -> mapper.personToPersonDto(person)
+                )
+                .collect(toList());
+    }
+
+    @SneakyThrows
+    @Override
+    public List<PersonDto> findLimitOrderByField(int currentPage, int countRecords,String field) {
+        List<Person> personList = personDao.selectLimitOrder(currentPage, countRecords, field);
+        return personList.stream()
+                .map(person -> mapper.personToPersonDto(person)
+                )
+                .collect(toList());
+    }
+
+    @SneakyThrows
+    @Override
+    public Integer getCountRows() {
+        return personDao.getNumberOfRows();
+    }
+
     @SneakyThrows
     private DaoPersonImpl getDao() {
         DataForTable<Person> data = new DataForTable<>(new Person());
